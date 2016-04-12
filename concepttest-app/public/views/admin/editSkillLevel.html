@@ -1,0 +1,59 @@
+<div class="page page-table-static clearfix">
+ 
+ <ol class="breadcrumb breadcrumb-small">
+  <li>L&iacute;neas de Carrera</li>
+  <li class="active">
+   <a href="#/admin/skills">Niveles de competencia</a>
+  </li>
+ </ol>
+
+ <div class="page-wrap">
+  <div class="row">
+   <div class="col-lg-6">
+	<div class="panel panel-lined mb30" ng-controller="EditSkillLevel">
+	 <div class="panel-heading"><i>Edici&oacute;n</i></div>
+	 <div class="panel-body">
+	  <form role="form" name="editSkillLevelForm" ng-submit="save(editSkillLevelForm.$valid)" novalidate>
+	   <input type="hidden" name="id" class="form-control" ng-model="skillLevel._id"/>
+	   <div class="form-group" ng-class="{'has-error' : editSkillLevelForm.name.$invalid && !editSkillLevelForm.name.$pristine}">
+		<label class="text-uppercase small text-bold">Nombre:</label>
+		<input type="text" name="name" class="form-control" ng-model="skillLevel.name" required>
+		<p ng-show="editSkillLevelForm.name.$invalid && !editSkillLevelForm.name.$pristine" class="help-block">El nombre es requerido.</p>
+	   </div>
+	   <div class="form-group" ng-class="{'has-error' : editSkillLevelForm.description.$invalid && !editSkillLevelForm.description.$pristine}">
+		<label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
+		<input type="text" name="description" class="form-control" ng-model="skillLevel.description" required>
+		<p ng-show="editSkillLevelForm.description.$invalid && !editSkillLevelForm.description.$pristine" class="help-block">La descripci&oacute;n es requerida.</p>
+	   </div>
+	   <div class="form-group" ng-class="{'has-error' : editSkillLevelForm.skill.$invalid && !editSkillLevelForm.skill.$pristine}">
+		<label class="text-uppercase small text-bold">Competencia:</label>
+		<select name="skill" 
+			class="form-control" 
+			ng-model="skillLevel.skill"
+			ng-options="skill._id as skill.name for skill in skills" 
+			required>
+		 <option value="">Selecciona una competencia</option> 
+		</select>
+		<p ng-show="editSkillLevelForm.skill.$invalid && !editSkillLevelForm.skill.$pristine" class="help-block">La competencia es requerida.</p>
+	   </div>
+	   <div class="form-group" ng-class="{'has-error' : editSkillLevelForm.min.$invalid && !editSkillLevelForm.min.$pristine}">
+		<label class="text-uppercase small text-bold">P. M&iacute;nimo</label>
+		<input type="number" name="min" class="form-control" min="0" max="99" ng-model="skillLevel.min" required>
+		<p ng-show="editSkillLevelForm.min.$invalid && !editSkillLevelForm.min.$pristine" class="help-block">Nivel m&iacute;nimo es requerido</p>
+	   </div>
+	   <div class="form-group" ng-class="{'has-error' : editSkillLevelForm.max.$invalid && !editSkillLevelForm.max.$pristine}">
+		<label class="text-uppercase small text-bold">P. M&aacute;ximo</label>
+		<input type="number" name="max" class="form-control" min="100" max="199" ng-model="skillLevel.max" required>
+		<p ng-show="editSkillLevelForm.max.$invalid && !editSkillLevelForm.max.$pristine" class="help-block">Nivel m&aacute;ximo es requerido</p>
+	   </div>
+	   <div class="form-group">
+		<button type="submit" class="btn btn-default" ng-disabled="editSkillLevelForm.$invalid">Editar</button> 
+		<button type="button" class="btn btn-default" ng-click="cancel()">Cancelar</button> 
+	   </div>
+	  </form>
+	 </div>
+	</div>
+   </div>
+  </div>
+ </div>
+</div>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Appboard - Admin Template with Angularjs">
+  <meta name="keywords" content="appboard, webapp, admin, dashboard, template, ui">
+  <meta name="author" content="bootstraphunter">
+  <!-- <base href="/"> -->
+
+  <title>Plataforma de evaluaci&oacute;n</title>
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="fonts/font-awesome/font-awesome.css">
+	
+  <!-- Css/Less Stylesheets -->
+  <link rel="stylesheet" href="styles/vendors/bootstrap.min.css">
+  <link rel="stylesheet/less" href="styles/main.less">
+	
+  <!-- Match Media polyfill for IE9 -->
+  <!--[if IE 9]><!--> <script src="scripts/ie/matchMedia.js"></script>  <!--<![endif]--> 
+ </head>
+ <body ng-app="app" id="app" class="app {{themeActive}}" custom-page ng-class="{'layout-horizontal': isLayoutHorizontal}" ng-controller="AppCtrl">
+  <header class="site-head clearfix" id="site-head" ng-controller="HeadCtrl" ng-include=" 'views/header.html' "></header>
+		
+  <div class="main-container clearfix">
+   <aside class="nav-wrap" id="site-nav" ng-controller="NavCtrl" ng-include=" 'views/nav.html' " custom-scrollbar></aside>
+
+   <div class="content-container" ng-class="{container: isLayoutHorizontal}" id="content" ng-view></div>
+
+   <footer id="site-foot" class="site-foot clearfix">
+	<p class="left">&copy; Copyright 2014 <strong>APPBOARD</strong>, All rights reserved.</p>
+	<p class="right">v1.1</p>
+   </footer>
+  </div>
+
+  <!-- Dev only -->
+  <script src="scripts/dev/less.min.js"></script>	
+
+  <!-- Vendors -->
+  <script src="scripts/vendors/jquery.min.js"></script> <!-- load before angular -->
+  <script src="scripts/vendors/angular.min.js"></script>
+
+  <!-- Plugins -->
+  <script src="scripts/plugins/angular-route.min.js"></script>
+  <script src="scripts/plugins/angular-animate.min.js"></script>
+  <script src="scripts/plugins/angular-sanitize.min.js"></script>
+  <script src="scripts/plugins/ui-bootstrap-tpls.min.js"></script>
+  <script src="scripts/plugins/select.min.js"></script>
+  <script src="scripts/plugins/bootstrap-slider.min.js"></script>
+  <script src="scripts/plugins/textAngular.min.js"></script>
+  <script src="scripts/plugins/perfect-scrollbar.min.js"></script>
+  <script src="scripts/plugins/chartist.js"></script> 
+  <script src="scripts/plugins/angular.easypiechart.js"></script>
+  <script src="scripts/plugins/angular-skycons.min.js"></script>
+  <script src="scripts/plugins/loading-bar.min.js"></script>
+  <script src="scripts/plugins/angular-fullscreen.js"></script>
+	
+  <!-- Custom scripts -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/shared/app.ctrls.js"></script>
+  <script src="scripts/shared/app.directives.js"></script>
+  <script src="scripts/shared/app.services.js"></script>
+  <script src="scripts/ui/app.ui.ctrls.js"></script>
+  <script src="scripts/form/app.ui.form.ctrls.js"></script>
+  <script src="scripts/form/app.ui.form.directives.js"></script>
+  <script src="scripts/tables/app.ui.table.ctrls.js"></script>
+  <script src="scripts/charts/app.chart.ctrls.js"></script>
+  <script src="scripts/charts/app.chart.directives.js"></script>
+  <script src="scripts/todo/app.todo.js"></script>
+  <script src="scripts/email/app.email.ctrls.js"></script>
+	
+  <!-- App scripts -->
+  <script src="scripts/controllers/app.ui.admin.skill.js"></script>
+  <script src="scripts/controllers/app.ui.admin.skill.types.js"></script>
+  <script src="scripts/controllers/app.ui.admin.skill.levels.js"></script>
+  <script src="scripts/controllers/app.ui.admin.position.js"></script>
+
+ </body>
+</html>

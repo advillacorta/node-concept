@@ -1,0 +1,68 @@
+<div class="page page-table-static clearfix">
+
+ <ol class="breadcrumb breadcrumb-small">
+  <li>L&iacute;neas de Carrera</li>
+  <li class="active">
+   <a href="#/admin/skills">Competencias</a>
+  </li>
+ </ol>
+
+ <div class="page-wrap">
+  <div class="row">
+   <div class="col-lg-12">
+	<div class="panel panel-lined table-responsive mb30"  ng-controller="ListSkills">
+	 <div class="panel-body">
+	  
+	  <form name="skillForm" action="#/admin/newSkill">
+	   <button type="submit" class="btn btn-default">Nuevo</button>
+	  </form>
+
+	  <form class="form-horizontal right col-lg-4">
+	   <input type="text" class="form-control input-sm" placeholder="Buscar..." data-ng-model="searchKeywords" data-ng-keyup="search()">
+	  </form>
+	 </div>
+
+	 <table class="table table-bordered table-striped">
+	  <thead>
+	   <tr>
+		<th>Nombre
+		 <div class="th">
+		  <i class="fa fa-caret-up icon-up" ng-click=" order('name')" ng-class="{active: row == 'name'}"></i>
+		  <i class="fa fa-caret-down icon-down" ng-click=" order('-name')" ng-class="{active: row == '-name'}"></i>
+		 </div>
+		</th>
+		<th>Descripci&oacute;n
+		 <div class="th">
+		  <i class="fa fa-caret-up icon-up" ng-click=" order('description')" ng-class="{active: row == 'description'}"></i>
+		  <i class="fa fa-caret-down icon-down" ng-click=" order('-description')" ng-class="{active: row == '-description'}"></i>
+		 </div>
+		</th>
+		<th></th>
+		<th></th>
+	   </tr>
+	  </thead>
+	  <tbody>
+	   <tr ng-repeat="data in currentPageStores track by $index">
+		<td>{{data.name}}</td>
+		<td>{{data.description}}</td>
+		<td><a ng-href="javascript: return false;" ng-click="edit(data._id)">Modificar</a></td>
+		<td><a ng-href="javascript: return false;" ng-click="delete(data._id)">Eliminar</a></td>
+	   </tr>
+	  </tbody>
+	 </table>
+
+	 <div class="panel-footer clearfix">
+	  <p class="left mt15 small">
+		Mostrando {{currentPageStores.length*(currentPage - 1) + 1}} a {{currentPageStores.length*currentPage}} de {{datas.length}} registros
+	  </p>
+	  <pagination boundary-links="true" total-items="filteredData.length" ng-model="currentPage" class="pagination-sm right" 
+				  max-size="5" ng-change="select(currentPage)" items-per-page="numPerPage" rotate="false"
+				  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+	  </pagination>
+	 </div>
+	 
+	</div>
+   </div>
+  </div>
+ </div>
+</div>
