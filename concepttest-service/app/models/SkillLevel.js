@@ -15,7 +15,8 @@ var SkillLevelSchema = new Schema (
 	}
 },
 {
-	collection: 'SkillLevels'
+	collection: 'SkillLevels',
+	timestamps: true
 });
 
 module.exports = mongoose.model('SkillLevel', SkillLevelSchema);

@@ -8,7 +8,8 @@ var SkillTypeSchema = new Schema({
 	description: String
 }, 
 { 
-	collection : 'SkillTypes'
+	collection : 'SkillTypes',
+	timestamps: true
 });
 
 

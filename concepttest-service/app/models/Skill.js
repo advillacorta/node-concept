@@ -12,7 +12,8 @@ var SkillSchema = new Schema({
 	}
 },
 {
-	collection : 'Skills'
+	collection : 'Skills',
+	timestamps: true
 });
 
 module.exports = mongoose.model('Skill', SkillSchema);
