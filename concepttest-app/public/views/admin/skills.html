@@ -54,7 +54,7 @@
 
  <!-- Registro de competencias -->
  <modal title="Registro de competencia" visible="showNew" data-backdrop="static">
-  <form role="form" name="newSkillForm" ng-submit="save(newSkillForm.$valid)" novalidate>
+  <form role="form" name="newSkillForm" ng-controller="NewSkill" ng-init="init()" ng-submit="save(newSkillForm.$valid)" novalidate>
    <div class="form-group" ng-class="{'has-error' : newSkillForm.name.$invalid && !newSkillForm.name.$pristine}">
     <label class="text-uppercase small text-bold">Nombre:</label>
     <input type="text" name="name" class="form-control" ng-model="skill.name" required>
