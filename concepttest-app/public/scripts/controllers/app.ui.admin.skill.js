@@ -100,6 +100,12 @@ angular.module("app.ui.admin.skill", [])
 	    {
 	        $scope.showNew = !$scope.showNew;
 	    };
+	    
+		$scope.showEdit = false;
+    	$scope.toggleEdit = function(id)
+    	{
+        	$scope.showEdit = !$scope.showEdit;
+    	};
 	}
 ])
 
