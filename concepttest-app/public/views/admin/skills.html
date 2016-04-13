@@ -1,68 +1,81 @@
-<div class="page page-table-static clearfix">
+<div class="panel panel-lined table-responsive mb30 " ng-controller="ListSkills">
 
- <ol class="breadcrumb breadcrumb-small">
-  <li>L&iacute;neas de Carrera</li>
-  <li class="active">
-   <a href="#/admin/skills">Competencias</a>
-  </li>
- </ol>
+ <!--Listado de competencias -->
+ <div class="panel-body">
 
- <div class="page-wrap">
-  <div class="row">
-   <div class="col-lg-12">
-	<div class="panel panel-lined table-responsive mb30"  ng-controller="ListSkills">
-	 <div class="panel-body">
-	  
-	  <form name="skillForm" action="#/admin/newSkill">
-	   <button type="submit" class="btn btn-default">Nuevo</button>
-	  </form>
+  <form class="form-horizontal left col-lg-4">
+   <button ng-click="toggleNew()" class="btn btn-default">Nuevo</button>
+  </form>
 
-	  <form class="form-horizontal right col-lg-4">
-	   <input type="text" class="form-control input-sm" placeholder="Buscar..." data-ng-model="searchKeywords" data-ng-keyup="search()">
-	  </form>
-	 </div>
-
-	 <table class="table table-bordered table-striped">
-	  <thead>
-	   <tr>
-		<th>Nombre
-		 <div class="th">
-		  <i class="fa fa-caret-up icon-up" ng-click=" order('name')" ng-class="{active: row == 'name'}"></i>
-		  <i class="fa fa-caret-down icon-down" ng-click=" order('-name')" ng-class="{active: row == '-name'}"></i>
-		 </div>
-		</th>
-		<th>Descripci&oacute;n
-		 <div class="th">
-		  <i class="fa fa-caret-up icon-up" ng-click=" order('description')" ng-class="{active: row == 'description'}"></i>
-		  <i class="fa fa-caret-down icon-down" ng-click=" order('-description')" ng-class="{active: row == '-description'}"></i>
-		 </div>
-		</th>
-		<th></th>
-		<th></th>
-	   </tr>
-	  </thead>
-	  <tbody>
-	   <tr ng-repeat="data in currentPageStores track by $index">
-		<td>{{data.name}}</td>
-		<td>{{data.description}}</td>
-		<td><a ng-href="javascript: return false;" ng-click="edit(data._id)">Modificar</a></td>
-		<td><a ng-href="javascript: return false;" ng-click="delete(data._id)">Eliminar</a></td>
-	   </tr>
-	  </tbody>
-	 </table>
-
-	 <div class="panel-footer clearfix">
-	  <p class="left mt15 small">
-		Mostrando {{currentPageStores.length*(currentPage - 1) + 1}} a {{currentPageStores.length*currentPage}} de {{datas.length}} registros
-	  </p>
-	  <pagination boundary-links="true" total-items="filteredData.length" ng-model="currentPage" class="pagination-sm right" 
-				  max-size="5" ng-change="select(currentPage)" items-per-page="numPerPage" rotate="false"
-				  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
-	  </pagination>
-	 </div>
-	 
-	</div>
-   </div>
-  </div>
+  <form class="form-horizontal right col-lg-4">
+   <input type="text" class="form-control input-sm" placeholder="Buscar..." data-ng-model="searchKeywords" data-ng-keyup="search()">
+  </form>
  </div>
+
+ <table class="table table-bordered table-striped">
+  <thead>
+   <tr>
+	<th>Nombre
+	 <div class="th">
+	  <i class="fa fa-caret-up icon-up" ng-click=" order('name')" ng-class="{active: row == 'name'}"></i>
+	  <i class="fa fa-caret-down icon-down" ng-click=" order('-name')" ng-class="{active: row == '-name'}"></i>
+	 </div>
+	</th>
+	<th>Descripci&oacute;n
+	 <div class="th">
+	  <i class="fa fa-caret-up icon-up" ng-click=" order('description')" ng-class="{active: row == 'description'}"></i>
+	  <i class="fa fa-caret-down icon-down" ng-click=" order('-description')" ng-class="{active: row == '-description'}"></i>
+	 </div>
+	</th>
+	<th></th>
+	<th></th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr ng-repeat="data in currentPageStores track by $index">
+	<td>{{data.name}}</td>
+	<td>{{data.description}}</td>
+	<td><a ng-href="javascript: return false;" ng-click="edit(data._id)">Modificar</a></td>
+	<td><a ng-href="javascript: return false;" ng-click="delete(data._id)">Eliminar</a></td>
+   </tr>
+  </tbody>
+ </table>
+
+ <div class="panel-footer clearfix">
+  <p class="left mt15 small">
+	Mostrando {{currentPageStores.length*(currentPage - 1) + 1}} a {{currentPageStores.length*currentPage}} de {{datas.length}} registros
+  </p>
+  <pagination boundary-links="true" total-items="filteredData.length" ng-model="currentPage" class="pagination-sm right" 
+			  max-size="5" ng-change="select(currentPage)" items-per-page="numPerPage" rotate="false"
+			  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+  </pagination>
+ </div>
+
+ <!-- Registro de competencias -->
+ <modal title="Registro de competencia" visible="showNew" data-backdrop="static">
+  <form role="form" name="newSkillForm" ng-submit="save(newSkillForm.$valid)" novalidate>
+   <div class="form-group" ng-class="{'has-error' : newSkillForm.name.$invalid && !newSkillForm.name.$pristine}">
+    <label class="text-uppercase small text-bold">Nombre:</label>
+    <input type="text" name="name" class="form-control" ng-model="skill.name" required>
+    <p ng-show="newSkillForm.name.$invalid && !newSkillForm.name.$pristine" class="help-block">El nombre es requerido.</p>
+   </div>
+   <div class="form-group" ng-class="{'has-error' : newSkillForm.description.$invalid && !newSkillForm.description.$pristine}">
+    <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
+    <input type="text" name="description" class="form-control" ng-model="skill.description" required>
+    <p ng-show="newSkillForm.description.$invalid && !newSkillForm.description.$pristine" class="help-block">La descripci&oacute;n es requerida.</p>
+   </div>
+   <div class="form-group" ng-class="{'has-error' : newSkillForm.type.$invalid && !newSkillForm.type.$pristine}">
+    <label class="text-uppercase small text-bold">Tipo:</label>
+    <select name="type" class="form-control" ng-model="skill.type" ng-options="skillType._id as skillType.name for skillType in skillTypes" required>
+     <option value="">Selecciona un tipo</option> 
+    </select>
+    <p ng-show="newSkillForm.type.$invalid && !newSkillForm.type.$pristine" class="help-block">El tipo es requerido.</p>
+   </div>
+   <div class="form-group">
+    <button type="submit" class="btn btn-default" ng-disabled="newSkillForm.$invalid">Registrar</button> 
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
+   </div>
+  </form>
+ </modal>
+
 </div>

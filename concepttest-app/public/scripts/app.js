@@ -1,9 +1,7 @@
-;(function() 
-{
+;(function() {
 	"use strict";
 
-	angular.module("app", 
-	[
+	angular.module("app", [
 		/* Angular modules */
 		"ngRoute",
 		"ngAnimate",
@@ -21,7 +19,6 @@
 		
 		/* App Modules */
 		"app.directives",
-		//"app.services",
 		"app.ctrls",
 		
 		"app.ui.admin.skill",
@@ -29,6 +26,53 @@
 		"app.ui.admin.skill.levels",
 		"app.ui.admin.position"
 	])
+
+	.directive('modal', function () {
+	    return {
+	      template: '<div class="modal fade">' + 
+	          '<div class="modal-dialog">' + 
+	            '<div class="modal-content">' + 
+	              '<div class="modal-header">' + 
+	                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
+	                '<h4 class="modal-title">{{ title }}</h4>' + 
+	              '</div>' + 
+	              '<div class="modal-body" ng-transclude></div>' + 
+	            '</div>' + 
+	          '</div>' + 
+	        '</div>',
+	      restrict: 'E',
+	      transclude: true,
+	      replace:true,
+	      scope:true,
+	      link: function postLink(scope, element, attrs) {
+	        scope.title = attrs.title;
+
+	        scope.$watch(attrs.visible, function(value)
+	        {
+	          if(value == true)
+	          {
+	            $(element).modal('show');
+	          }
+	          else
+	          {
+	          	$(element).modal('hide');
+	          }
+	        });
+
+	        $(element).on('shown.bs.modal', function(){
+	          scope.$apply(function(){
+	            scope.$parent[attrs.visible] = true;
+	          });
+	        });
+
+	        $(element).on('hidden.bs.modal', function(){
+	          scope.$apply(function(){
+	            scope.$parent[attrs.visible] = false;
+	          });
+	        });
+	      }
+	    };
+	})
 
 	.factory('skillTypeService', ['$http', function($http)
 	{
@@ -128,39 +172,6 @@
 
 		return dataFactory;
 	}])
-	
-	.factory('positionService', ['$http', function($http)
-	{
-		var baseUrl = 'http://localhost:8082/api/position';
-		var dataFactory = {};
-		
-		dataFactory.getPositions = function()
-		{
-			return $http.get(baseUrl);
-		}
-		
-		dataFactory.getPosition = function(id)
-		{
-			return $http.get(baseUrl + '/' + id);
-		}
-		
-		dataFactory.createPosition = function(position)
-		{
-			return $http.post(baseUrl, position);
-		}
-		
-		dataFactory.updatePosition = function(position)
-		{
-			return $http.put(baseUrl + '/' + position._id, position);
-		}
-		
-		dataFactory.deletePosition = function(id)
-		{
-			return $http.delete(baseUrl + '/' + id);
-		}
-		
-		return dataFactory;
-	}])
 
 	// globally set ui-select theme
 	.config(["uiSelectConfig", function(uiSelectConfig) {
@@ -179,7 +190,8 @@
 		var routes = [
 			"admin/skillTypes", "admin/skillLevels", "admin/skills", "admin/positions",
 			"admin/newSkillType", "admin/newSkillLevel", "admin/newSkill",
-			"admin/editSkillType", "admin/editSkill", "admin/editSkillLevel"
+			"admin/editSkillType", "admin/editSkill", "admin/editSkillLevel",
+			"admin/manageSkills"
 		];
 
 		function setRoutes(route) {
@@ -197,10 +209,8 @@
 		});
 
 		$routeProvider
-			.when("/", {redirectTo: "/admin/skillTypes"})
+			.when("/", {redirectTo: "/admin/manageSkills"})
 			.when("/404", {templateUrl: "views/error/404.html"})
 			.otherwise({redirectTo: "/404"});
 	}])
 }())
-
-
