@@ -1,7 +1,9 @@
-;(function() {
+;(function() 
+{
 	"use strict";
 
-	angular.module("app", [
+	angular.module("app", 
+	[
 		/* Angular modules */
 		"ngRoute",
 		"ngAnimate",
@@ -11,24 +13,15 @@
 		"ui.bootstrap",
 		"ui.select",
 		"textAngular",
-		"easypiechart",
 		"angular-skycons",
 		"angular-loading-bar",
-		"FBAngular",
 
 		/* Custom Modules */
 		"app.ui.ctrls",
-		"app.ui.form.ctrls",
-		"app.ui.form.directives",
-		"app.ui.table.ctrls",
-		"app.chart.ctrls",
-		"app.chart.directives",
-		"app.todo",
-		"app.email.ctrls",
 		
 		/* App Modules */
 		"app.directives",
-		"app.services",
+		//"app.services",
 		"app.ctrls",
 		
 		"app.ui.admin.skill",
