@@ -4,8 +4,8 @@
 angular.module("app.ui.admin.skill", [])
 
 // List Controller 
-.controller("ListSkills", ["$route", "$scope", "$filter", "$window", "$location", "skillService", 
-	function($route, $scope, $filter, $window, $location, skillService) 
+.controller("ListSkills", ["$route", "$rootScope", "$scope", "$filter", "$window", "$location", "skillService", 
+	function($route, $rootScope, $scope, $filter, $window, $location, skillService) 
 	{
 		$scope.datas;
 		$scope.searchKeywords;
@@ -78,11 +78,6 @@ angular.module("app.ui.admin.skill", [])
 			});
 		}
 	
-		$scope.edit = function(id)
-		{
-			$window.location.href = '/#/admin/editSkill?id=' + id;
-		}
-	
 		$scope.delete = function(id)
 		{
 			if(confirm("¿Está seguro que desea eliminar la competencia seleccionada?"))
@@ -105,6 +100,7 @@ angular.module("app.ui.admin.skill", [])
     	$scope.toggleEdit = function(id)
     	{
         	$scope.showEdit = !$scope.showEdit;
+        	$rootScope.$emit('handleEdit', { id: id} );
     	};
 	}
 ])
@@ -137,24 +133,22 @@ angular.module("app.ui.admin.skill", [])
 				});
 			}
 		}
-	
-		$scope.cancel = function()
-		{
-			$window.location.href = '/#/admin/skills';
-		}
 	}
 ])
 
 // Edicion de competencia
-.controller("EditSkill", ["$scope", "$routeParams", "$window", "skillService", "skillTypeService", 
-	function($scope, $routeParams, $window, skillService, skillTypeService)
+.controller("EditSkill", ["$rootScope", "$scope", "$routeParams", "$window", "skillService", "skillTypeService", 
+	function($rootScope, $scope, $routeParams, $window, skillService, skillTypeService)
 	{	
 		$scope.skillTypes;
 	
-		var id = $routeParams.id;
+		$rootScope.$on('handleEdit', function(event, params)
+		{
+			var id = params.id;
 	
-		getSkillTypes();
-		getSkill(id);
+			getSkillTypes();
+			getSkill(id);
+		});
 	
 		function getSkill(id)
 		{
@@ -187,11 +181,6 @@ angular.module("app.ui.admin.skill", [])
 					$window.location.href = '/#/admin/skills';
 				});
 			}
-		}
-	
-		$scope.cancel = function()
-		{
-			$window.location.href = '/#/admin/skills';
 		}
 	}
 ])
