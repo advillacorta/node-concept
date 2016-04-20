@@ -19,6 +19,7 @@
 		
 		/* App Modules */
 		"app.directives",
+		//"app.services",
 		"app.ctrls",
 		
 		"app.ui.admin.skill",
@@ -73,6 +74,27 @@
 	      }
 	    };
 	})
+
+	.factory('notificationService', ['$timeout', function($timeout)
+	{
+    	var toastAnimation = "bouncyflip";
+		var toasts = [];
+		
+		var factory = {};
+
+		factory.showSuccessNotification = function(message)
+		{
+			toasts.push({
+				anim: toastAnimation,
+				type: angular.lowercase("Success"),
+				msg:  message
+			});
+
+			return toasts;
+		}
+
+		return factory;
+	}])
 
 	.factory('skillTypeService', ['$http', function($http)
 	{

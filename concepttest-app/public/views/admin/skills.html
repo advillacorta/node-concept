@@ -1,6 +1,5 @@
 <div class="panel panel-lined table-responsive mb30 " ng-controller="ListSkills">
  <div class="panel-heading"><i>Competencias</i></div>
- 
  <!--Listado de competencias -->
  <div class="panel-body">
 
@@ -36,8 +35,8 @@
    <tr ng-repeat="data in currentPageStores track by $index">
 	<td>{{data.name}}</td>
 	<td>{{data.description}}</td>
-	<td><a ng-href="javascript: return false;" ng-click="edit(data._id)">Modificar</a></td>
-	<td><a ng-href="javascript: return false;" ng-click="delete(data._id)">Eliminar</a></td>
+	<td><a href ng-click="toggleEdit(data._id)">Modificar</a></td>
+	<td><a href ng-click="delete(data._id)">Eliminar</a></td>
    </tr>
   </tbody>
  </table>
@@ -52,9 +51,9 @@
   </pagination>
  </div>
 
- <!-- Registro de competencias -->
+ <!-- Registro de competencia -->
  <modal title="Registro de competencia" visible="showNew" data-backdrop="static">
-  <form role="form" name="newSkillForm" ng-controller="NewSkill" ng-init="init()" ng-submit="save(newSkillForm.$valid)" novalidate>
+  <form role="form" name="newSkillForm" ng-controller="NewSkill" ng-init="init()"  ng-submit="save(newSkillForm.$valid)" novalidate>
    <div class="form-group" ng-class="{'has-error' : newSkillForm.name.$invalid && !newSkillForm.name.$pristine}">
     <label class="text-uppercase small text-bold">Nombre:</label>
     <input type="text" name="name" class="form-control" ng-model="skill.name" required>
@@ -110,4 +109,11 @@
    </div>
   </form>
  </modal>
+ 
+ <div class="toast toast-{{toastPosition}}">
+  <alert ng-repeat="toast in toasts" type="{{toast.type}}" class="toast-{{toast.anim}}">
+   <div ng-bind-html="toast.msg"></div>
+  </alert>
+ </div>
+
 </div>
