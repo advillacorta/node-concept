@@ -72,7 +72,7 @@
     <p ng-show="newSkillForm.type.$invalid && !newSkillForm.type.$pristine" class="help-block">El tipo es requerido.</p>
    </div>
    <div class="form-group">
-    <button type="submit" class="btn btn-default" ng-disabled="newSkillForm.$invalid">Registrar</button> 
+    <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="newSkillForm.$invalid">Registrar</button>
     <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
    </div>
   </form>
@@ -109,11 +109,5 @@
    </div>
   </form>
  </modal>
- 
- <div class="toast toast-{{toastPosition}}">
-  <alert ng-repeat="toast in toasts" type="{{toast.type}}" class="toast-{{toast.anim}}">
-   <div ng-bind-html="toast.msg"></div>
-  </alert>
- </div>
 
 </div>
