@@ -28,12 +28,10 @@ angular.module("app.ui.admin.skill", [])
 				$scope.filteredData = [];	
 				$scope.row = "";
 
-
 				$scope.numPerPageOpts = [5, 7, 10, 25, 50, 100];
 				$scope.numPerPage = $scope.numPerPageOpts[1];
 				$scope.currentPage = 1;
 				$scope.currentPageStores = []; // data to hold per pagination
-
 
 				$scope.select = function(page) {
 					var start = (page - 1)*$scope.numPerPage,
@@ -57,7 +55,6 @@ angular.module("app.ui.admin.skill", [])
 					$scope.select(1);
 					$scope.currentPage = 1;
 				}
-
 
 				$scope.search = function() {
 					$scope.filteredData = $filter("filter")($scope.datas, $scope.searchKeywords);
@@ -87,12 +84,17 @@ angular.module("app.ui.admin.skill", [])
 					skillService.deleteSkill(id)
 					.then(function(response)
 					{
-						$route.reload();
 						toastr.success('Registro eliminado.');
+						reload();
 					});
 				}
 			});
 		}
+
+	    function reload()
+	    {
+	    	$route.reload();
+	    }
 
 		$scope.showNew = false;
 	    $scope.toggleNew = function()
@@ -100,12 +102,24 @@ angular.module("app.ui.admin.skill", [])
 	        $scope.showNew = !$scope.showNew;
 	    };
 
+	    $rootScope.$on('closeNewModal', function(event, params)
+	    {
+	    	$scope.showNew = !$scope.showNew;
+	    	$timeout(reload, 800);
+	    });
+
 		$scope.showEdit = false;
 	    $scope.toggleEdit = function(id)
 	    {
 	        $scope.showEdit = !$scope.showEdit;
 	        $rootScope.$emit('handleEdit', { id: id} );
 	    };
+
+	    $rootScope.$on('closeEditModal', function(event, params)
+	    {
+	    	$scope.showEdit = !$scope.showEdit;
+	    	$timeout(reload, 800);
+	    });
 	}
 ])
 
@@ -133,7 +147,7 @@ angular.module("app.ui.admin.skill", [])
 				.then(function(response)
 				{
 					toastr.success('Registro satisfactorio');
-					$scope.showNew = !$scope.showNew;
+					$rootScope.$emit('closeNewModal', {});
 				});
 			}
 		}
@@ -173,8 +187,8 @@ angular.module("app.ui.admin.skill", [])
 				skillService.updateSkill(data)
 				.then(function(response)
 				{
-					alert("Actualizacion satisfactoria");
-					$window.location.href = '/#/admin/skills';
+					toastr.success('Actualizacion satisfactoria');
+					$rootScope.$emit('closeEditModal', {});
 				});
 			}
 		}
