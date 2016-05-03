@@ -189,6 +189,7 @@
 	.config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
 
 		var routes = [
+		    "admin/managePositions",
 			"admin/manageSkills"
 		];
 
