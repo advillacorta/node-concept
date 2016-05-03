@@ -4,181 +4,211 @@
 angular.module("app.ui.admin.skill.levels", [])
 
 // List Controller 
-.controller("ListSkillLevels", ["$route", "$scope", "$filter", "$window", "$location", "skillLevelService", 
-	function($route, $scope, $filter, $window, $location, skillLevelService) {
-
-	$scope.datas;
-	$scope.searchKeywords;
-	$scope.filteredData;
-	$scope.numPerPageOpts;
-	$scope.numPerPage;
-	$scope.currentPage;
-	$scope.currentPageStores;
-
-	getSkillLevels();
-
-	function getSkillLevels()
+.controller("ListSkillLevels", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "$location", "skillLevelService", 
+	function($route, $rootScope, $scope, $filter, $window, $timeout, $location, skillLevelService) 
 	{
-		skillLevelService.getSkillLevels()
-		.then(function(response)
+		$scope.datas;
+		$scope.searchKeywords;
+		$scope.filteredData;
+		$scope.numPerPageOpts;
+		$scope.numPerPage;
+		$scope.currentPage;
+		$scope.currentPageStores;
+
+		getSkillLevels();
+
+		function getSkillLevels()
 		{
-			$scope.datas = response.data;
+			skillLevelService.getSkillLevels()
+			.then(function(response)
+			{
+				$scope.datas = response.data;
 
-			$scope.searchKeywords = "";
-			$scope.filteredData = [];	
-			$scope.row = "";
+				$scope.searchKeywords = "";
+				$scope.filteredData = [];	
+				$scope.row = "";
 
-
-			$scope.numPerPageOpts = [5, 7, 10, 25, 50, 100];
-			$scope.numPerPage = $scope.numPerPageOpts[1];
-			$scope.currentPage = 1;
-			$scope.currentPageStores = []; // data to hold per pagination
-
-
-			$scope.select = function(page) {
-				var start = (page - 1)*$scope.numPerPage,
-					end = start + $scope.numPerPage;
-
-				$scope.currentPageStores = $scope.filteredData.slice(start, end);
-			}
-
-			$scope.onFilterChange = function() {
-				$scope.select(1);
+				$scope.numPerPageOpts = [5, 7, 10, 25, 50, 100];
+				$scope.numPerPage = $scope.numPerPageOpts[1];
 				$scope.currentPage = 1;
-				$scope.row = '';
-			}
-
-			$scope.onNumPerPageChange = function() {
-				$scope.select(1);
-				$scope.currentPage = 1;
-			}
-
-			$scope.onOrderChange = function() {
-				$scope.select(1);
-				$scope.currentPage = 1;
-			}
+				$scope.currentPageStores = [];
 
 
-			$scope.search = function() {
-				$scope.filteredData = $filter("filter")($scope.datas, $scope.searchKeywords);
-				$scope.onFilterChange();
-			}
+				$scope.select = function(page) 
+				{
+					var start = (page - 1)*$scope.numPerPage,
+						end = start + $scope.numPerPage;
 
-			$scope.order = function(rowName) {
-				if($scope.row == rowName)
-					return;
-				$scope.row = rowName;
-				$scope.filteredData = $filter('orderBy')($scope.datas, rowName);
-				$scope.onOrderChange();
-			}
+					$scope.currentPageStores = $scope.filteredData.slice(start, end);
+				}
 
-			// init
-			$scope.search();
-			$scope.select($scope.currentPage);
-		});
+				$scope.onFilterChange = function() 
+				{
+					$scope.select(1);
+					$scope.currentPage = 1;
+					$scope.row = '';
+				}
 
-		$scope.edit = function(id)
-		{
-			$window.location.href = '/#/admin/editSkillLevel?id=' + id;
+				$scope.onNumPerPageChange = function() 
+				{
+					$scope.select(1);
+					$scope.currentPage = 1;
+				}
+
+				$scope.onOrderChange = function() 
+				{
+					$scope.select(1);
+					$scope.currentPage = 1;
+				}
+
+				$scope.search = function() 
+				{
+					$scope.filteredData = $filter("filter")($scope.datas, $scope.searchKeywords);
+					$scope.onFilterChange();
+				}
+
+				$scope.order = function(rowName) 
+				{
+					if($scope.row == rowName)
+						return;
+
+					$scope.row = rowName;
+					$scope.filteredData = $filter('orderBy')($scope.datas, rowName);
+					$scope.onOrderChange();
+				}
+
+				// init
+				$scope.search();
+				$scope.select($scope.currentPage);
+			});
 		}
 
 		$scope.delete = function(id)
 		{
-			if(confirm("¿Está seguro que desea eliminar el nivel de competencia seleccionada?"))
+			bootbox.confirm("¿Está seguro que desea eliminar el nivel de competencia seleccionada?", function(result)
 			{
-				skillLevelService.deleteSkillLevel(id)
+				if(result)
+				{
+					skillLevelService.deleteSkillLevel(id)
+					.then(function(response)
+					{
+						toastr.success('Registro eliminado.');
+						reload();
+					});
+				}
+			});
+		}
+
+		$scope.showNew = false;
+	    $scope.toggleNew = function()
+	    {
+	        $scope.showNew = !$scope.showNew;
+	    }
+
+		$scope.showEdit = false;
+	    $scope.toggleEdit = function(id)
+	    {
+	        $scope.showEdit = !$scope.showEdit;
+	        $rootScope.$emit('handleEditSkillLevel', { id: id} );
+	    }
+
+	    function reload()
+	    {
+	    	$route.reload();
+	    }
+
+	    $rootScope.$on('closeNewSkillLevelModal', function(event, params)
+	    {
+	    	$scope.showNew = !$scope.showNew
+	    	$timeout(reload, 800);
+	    });
+
+	    $rootScope.$on('closeEditSkillLevelModal', function(event, params)
+	    {
+	    	$scope.showEdit = !$scope.showEdit
+	    	$timeout(reload, 800);
+	    });
+	}
+])
+
+// Registro de nivel competencia
+.controller("NewSkillLevel", ["$rootScope", "$scope", "$window", "skillLevelService", "skillService", 
+	function($rootScope, $scope, $window, skillLevelService, skillService) 
+	{
+		$scope.skills;
+
+		$scope.init = function()
+		{
+			skillService.getSkills()
+			.then(function(response)
+			{
+				$scope.skills = response.data;
+			});
+		}
+
+		$scope.save = function(isValid)
+		{
+			if(isValid)
+			{
+				var data = $scope.skillLevel;
+				skillLevelService.createSkillLevel(data)
 				.then(function(response)
 				{
-					$route.reload();
+					toastr.success('Registro satisfactorio');
+					$rootScope.$emit('closeNewSkillLevelModal', {});
 				});
 			}
 		}
 	}
-}])
-
-// Registro de nivel competencia
-.controller("NewSkillLevel", ["$scope", "$window", "skillLevelService", "skillService", 
-	function($scope, $window, skillLevelService, skillService) {
-
-	$scope.skills;
-
-	$scope.init = function()
-	{
-		skillService.getSkills()
-		.then(function(response)
-		{
-			$scope.skills = response.data;
-		});
-	}
-
-	$scope.save = function(isValid)
-	{
-		if(isValid)
-		{
-			var data = $scope.skillLevel;
-			skillLevelService.createSkillLevel(data)
-			.then(function(response)
-			{
-				alert("Registro satisfactorio");
-				$window.location.href = '/#/admin/skillLevels';
-			});
-		}
-	}
-
-	$scope.cancel = function()
-	{
-		$window.location.href = '/#/admin/skillLevels';
-	}
-}])
+])
 
 // Edicion de nivel de competencia
-.controller("EditSkillLevel", ["$scope", "$routeParams", "$window", "skillLevelService", "skillService", 
-	function($scope, $routeParams, $window, skillLevelService, skillService) {
-
-	$scope.skills;
-
-	var id = $routeParams.id;
-
-	getSkills();
-	getSkillLevel(id);
-
-	function getSkillLevel(id)
+.controller("EditSkillLevel", ["$rootScope", "$scope", "$routeParams", "$window", "skillLevelService", "skillService", 
+	function($rootScope, $scope, $routeParams, $window, skillLevelService, skillService) 
 	{
-		skillLevelService.getSkillLevel(id)
-		.then(function(response)
-		{
-			console.log(response);
-			$scope.skillLevel = response.data;
-		});
-	}
+		$scope.skills;
 
-	function getSkills()
-	{
-		skillService.getSkills()
-		.then(function(response)
+		function getSkillLevel(id)
 		{
-			$scope.skills = response.data;
-		});
-	}
-
-	$scope.save = function(isValid)
-	{
-		if(isValid)
-		{
-			var data = $scope.skillLevel;
-			skillLevelService.updateSkillLevel(data)
+			skillLevelService.getSkillLevel(id)
 			.then(function(response)
 			{
-				alert("Actualizacion satisfactoria");
-				$window.location.href = '/#/admin/skillLevels';
+				console.log(response);
+				$scope.skillLevel = response.data;
 			});
 		}
-	}
 
-	$scope.cancel = function()
-	{
-		$window.location.href = '/#/admin/skillLevels';
+		function getSkills()
+		{
+			skillService.getSkills()
+			.then(function(response)
+			{
+				$scope.skills = response.data;
+			});
+		}
+
+		$scope.save = function(isValid)
+		{
+			if(isValid)
+			{
+				var data = $scope.skillLevel;
+				skillLevelService.updateSkillLevel(data)
+				.then(function(response)
+				{
+					toastr.success('Edición satisfactoria');
+					$rootScope.$emit('closeEditSkillLevelModal', {});
+				});
+			}
+		}
+
+		$rootScope.$on('handleEditSkillLevel', function(event, params)
+		{
+			var id = params.id;
+
+			getSkills();
+			getSkillLevel(id);
+		});
 	}
-}])
+])
 
 }())

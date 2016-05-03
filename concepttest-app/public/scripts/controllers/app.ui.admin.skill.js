@@ -33,6 +33,7 @@ angular.module("app.ui.admin.skill", [])
 				$scope.currentPage = 1;
 				$scope.currentPageStores = []; // data to hold per pagination
 
+
 				$scope.select = function(page) {
 					var start = (page - 1)*$scope.numPerPage,
 						end = start + $scope.numPerPage;
@@ -55,6 +56,7 @@ angular.module("app.ui.admin.skill", [])
 					$scope.select(1);
 					$scope.currentPage = 1;
 				}
+
 
 				$scope.search = function() {
 					$scope.filteredData = $filter("filter")($scope.datas, $scope.searchKeywords);
@@ -91,33 +93,33 @@ angular.module("app.ui.admin.skill", [])
 			});
 		}
 
-	    function reload()
-	    {
-	    	$route.reload();
-	    }
-
 		$scope.showNew = false;
 	    $scope.toggleNew = function()
 	    {
 	        $scope.showNew = !$scope.showNew;
 	    };
 
-	    $rootScope.$on('closeNewModal', function(event, params)
-	    {
-	    	$scope.showNew = !$scope.showNew;
-	    	$timeout(reload, 800);
-	    });
-
 		$scope.showEdit = false;
 	    $scope.toggleEdit = function(id)
 	    {
 	        $scope.showEdit = !$scope.showEdit;
-	        $rootScope.$emit('handleEdit', { id: id} );
+	        $rootScope.$emit('handleEditSkill', { id: id} );
 	    };
 
-	    $rootScope.$on('closeEditModal', function(event, params)
+	    function reload()
 	    {
-	    	$scope.showEdit = !$scope.showEdit;
+	    	$route.reload();
+	    }
+
+	    $rootScope.$on('closeNewSkillModal', function(event, params)
+	    {
+	    	$scope.showNew = !$scope.showNew
+	    	$timeout(reload, 800);
+	    });
+
+	    $rootScope.$on('closeEditSkillModal', function(event, params)
+	    {
+	    	$scope.showEdit = !$scope.showEdit
 	    	$timeout(reload, 800);
 	    });
 	}
@@ -147,7 +149,7 @@ angular.module("app.ui.admin.skill", [])
 				.then(function(response)
 				{
 					toastr.success('Registro satisfactorio');
-					$rootScope.$emit('closeNewModal', {});
+					$rootScope.$emit('closeNewSkillModal', {});
 				});
 			}
 		}
@@ -187,13 +189,13 @@ angular.module("app.ui.admin.skill", [])
 				skillService.updateSkill(data)
 				.then(function(response)
 				{
-					toastr.success('Actualizacion satisfactoria');
-					$rootScope.$emit('closeEditModal', {});
+					toastr.success('Edición satisfactoria');
+					$rootScope.$emit('closeEditSkillModal', {});
 				});
 			}
 		}
 
-		$rootScope.$on('handleEdit', function(event, params)
+		$rootScope.$on('handleEditSkill', function(event, params)
 		{
 			var id = params.id;
 

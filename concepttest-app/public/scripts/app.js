@@ -189,9 +189,6 @@
 	.config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
 
 		var routes = [
-			"admin/skillTypes", "admin/skillLevels", "admin/skills", "admin/positions",
-			"admin/newSkillType", "admin/newSkillLevel", "admin/newSkill",
-			"admin/editSkillType", "admin/editSkill", "admin/editSkillLevel",
 			"admin/manageSkills"
 		];
 

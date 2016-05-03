@@ -1,8 +1,8 @@
 <div class="panel panel-lined table-responsive mb30" ng-controller="ListSkillTypes">
- <div class="panel-heading"><i>Tipos de competencia</i></div>
+ <div class="panel-heading"><i>Tipos de Competencia</i></div>
  <div class="panel-body">
-  <form class="form-horizontal left col-lg-4" name="skillTypeForm" action="#/admin/newSkillType">
-   <button type="submit" class="btn btn-default">Nuevo</button>
+  <form class="form-horizontal left col-lg-4">
+   <button ng-click="toggleNew()" class="btn btn-default">Nuevo</button>
   </form>
 
   <form class="form-horizontal right col-lg-4">
@@ -33,12 +33,8 @@
    <tr ng-repeat="data in currentPageStores track by $index">
     <td>{{data.name}}</td>
     <td>{{data.description}}</td>
-    <td>
-   	 <a ng-href="javascript: return false;" ng-click="edit(data._id)">Modificar</a>
-    </td>
-    <td>
-   	 <a ng-href="javascript: return false;" ng-click="delete(data._id)">Eliminar</a>
-    </td>
+  <td><a href ng-click="toggleEdit(data._id)">Modificar</a></td>
+  <td><a href ng-click="delete(data._id)">Eliminar</a></td>
    </tr>
   </tbody>
  </table>
@@ -52,4 +48,46 @@
 			  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
   </pagination>
  </div>
+
+ <!-- Registro de tipo de competencia -->
+ <modal title="Registro de tipo de competencia" visible="showNew" data-backdrop="static">
+  <form role="form" name="newSkillTypeForm" ng-controller="NewSkillType" ng-submit="save(newSkillTypeForm.$valid)" novalidate>
+   <div class="form-group" ng-class="{'has-error' : newSkillTypeForm.name.$invalid && !newSkillTypeForm.name.$pristine}">
+    <label class="text-uppercase small text-bold">Nombre:</label>
+    <input type="text" name="name" class="form-control" ng-model="skillType.name" required/>
+    <p ng-show="newSkillTypeForm.name.$invalid && !newSkillTypeForm.name.$pristine" class="help-block">El nombre es requerido.</p>
+   </div>
+   <div class="form-group" ng-class="{'has-error' : newSkillTypeForm.description.$invalid && !newSkillTypeForm.description.$pristine}">
+    <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
+    <input type="text" name="description" class="form-control" ng-model="skillType.description" required/>
+    <p ng-show="newSkillTypeForm.description.$invalid && !newSkillTypeForm.description.$pristine" class="help-block">La descripci&oacute;n es requerida.</p>
+   </div>
+   <div class="form-group">
+    <button type="submit" class="btn btn-default" ng-disabled="newSkillTypeForm.$invalid">Registrar</button> 
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
+   </div>
+  </form>
+ </modal>
+
+  <!-- Edicion de tipo de competencia -->
+ <modal title="Edici&oacute;n de tipo de competencia" visible="showEdit" data-backdrop="static">
+  <form role="form" name="editSkillTypeForm" ng-controller="EditSkillType" ng-submit="save(editSkillTypeForm.$valid)" novalidate>
+   <input type="hidden" name="id" class="form-control" ng-model="skillType._id"/>
+   <div class="form-group" ng-class="{'has-error' : editSkillTypeForm.name.$invalid && !editSkillTypeForm.name.$pristine }">
+    <label class="text-uppercase small text-bold">Nombre:</label>
+    <input type="text" name="name" class="form-control" ng-model="skillType.name" required/>
+    <p ng-show="editSkillTypeForm.name.$invalid && !editSkillTypeForm.name.$pristine" class="help-block">Nombre es requerido.</p>
+   </div>
+   <div class="form-group" ng-class="{'has-error' : editSkillTypeForm.description.$invalid && !editSkillTypeForm.description.$pristine }">
+    <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
+    <input type="text" name="description" class="form-control" ng-model="skillType.description" required/>
+    <p ng-show="editSkillTypeForm.description.$invalid && !editSkillTypeForm.description.$pristine" class="help-block">Descripci&oacute;n es requerida.</p>
+   </div>
+   <div class="form-group">
+    <button type="submit" class="btn btn-default" ng-disabled="editSkillTypeForm.$invalid">Editar</button> 
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
+   </div>
+  </form>
+ </modal>
+
 </div>
