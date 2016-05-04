@@ -10,13 +10,16 @@
  <div class="page-wrap">
   <div class="row">
    <div class="col-lg-12">
-	<div class="panel panel-lined table-responsive mb30"  ng-controller="ListPositions">
+	<div class="panel panel-lined table-responsive mb30" ng-controller="ListPositions">
 	 <div class="panel-body">
-	  <button type="button" class="btn btn-default">Nuevo</button>
 
-	  <form class="form-horizontal right col-lg-4">
-		<input type="text" class="form-control input-sm" placeholder="Type keyword" data-ng-model="searchKeywords" data-ng-keyup="search()">
-	  </form>
+  	  <form class="form-horizontal left col-lg-4">
+   	   <button ng-click="toggleNew()" class="btn btn-default">Nuevo</button>
+  	  </form>
+
+  	  <form class="form-horizontal right col-lg-4">
+   	   <input type="text" class="form-control input-sm" placeholder="Buscar..." data-ng-model="searchKeywords" data-ng-keyup="search()">
+  	  </form>
 	 </div>
 
 	 <table class="table table-bordered table-striped">
@@ -53,6 +56,105 @@
 				previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
 	  </pagination>
 	 </div>
+
+ 	 <!-- Registro de cargo -->
+ 	 <modal title="Registro de cargo" size="modal-lg" visible="showNew" data-backdrop="static">
+ 	  <form role="form" name="newPositionForm" ng-controller="NewPosition" ng-init="init()"  ng-submit="save(newPositionForm.$valid)" novalidate>
+   	   <div class="form-group" ng-class="{'has-error' : newPositionForm.name.$invalid && !newPositionForm.name.$pristine}">
+    	<label class="text-uppercase small text-bold">Nombre:</label>
+    	<input type="text" name="name" class="form-control" ng-model="position.name" required>
+    	<p ng-show="newPositionForm.name.$invalid && !newPositionForm.name.$pristine" class="help-block">El nombre es requerido.</p>
+   	   </div>
+   	   <div class="form-group" ng-class="{'has-error' : newPositionForm.description.$invalid && !newPositionForm.description.$pristine}">
+    	<label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
+    	<input type="text" name="description" class="form-control" ng-model="position.description" required>
+    	<p ng-show="newPositionForm.description.$invalid && !newPositionForm.description.$pristine" class="help-block">La descripci&oacute;n es requerida.</p>
+   	   </div>
+   	   <div class="form-group" ng-class="{'has-error' : newPositionForm.overallGoal.$invalid && !newPositionForm.overallGoal.$pristine}">
+    	<label class="text-uppercase small text-bold">Objetivo general:</label>
+    	<input type="textarea" style="height: 80px;" name="overallGoal" class="form-control" ng-model="position.overallGoal" required>
+    	<p ng-show="newPositionForm.overallGoal.$invalid && !newPositionForm.overallGoal.$pristine" class="help-block">El objetivo general es requerido.</p>
+   	   </div>
+   	   <div class="form-group" ng-class="{'has-error' : newPositionForm.specificGoal.$invalid && !newPositionForm.specificGoal.$pristine}">
+    	<label class="text-uppercase small text-bold">Objetivo espec&iacute;fico:</label>
+    	<input type="textarea" style="height: 80px;" name="specificGoal" class="form-control" ng-model="position.specificGoal" required>
+    	<p ng-show="newPositionForm.specificGoal.$invalid && !newPositionForm.specificGoal.$pristine" class="help-block">El objetivo espec&iacute;fico es requerido.</p>
+   	   </div>
+
+   	   <div class="panel panel-lined table-responsive mb30 ">
+        <div class="panel-heading"><i>Competencias disponibles</i></div>
+   	    
+   	    <table class="table table-bordered table-striped">
+   	   	 <thead>
+	      <th>Nombre
+	       <div class="th">
+	  	    <i class="fa fa-caret-up icon-up" ng-click=" order('name')" ng-class="{active: row == 'name'}"></i>
+	  	    <i class="fa fa-caret-down icon-down" ng-click=" order('-name')" ng-class="{active: row == '-name'}"></i>
+	 	   </div>
+		  </th>
+		  <th></th>
+   	   	 </thead>
+   	   	 <tbody>
+          <tr ng-repeat="availableSkill in availableCurrentPageStores track by $index">
+		   <td>{{availableSkill.name}}</td>
+		   <td><a href ng-click="add($index, availableSkill._id)">Agregar</a></td>
+          </tr>
+   	   	 </tbody>
+   	    </table>
+
+		<div class="panel-footer clearfix">
+		 <p class="left mt15 small">
+		  Mostrando {{availableCurrentPageStores.length*(availableCurrentPage - 1) + 1}} a {{availableCurrentPageStores.length*availableCurrentPage}} de {{availableSkills.length}} registros
+		 </p>
+		 <pagination boundary-links="true" total-items="availableFilteredData.length" ng-model="availableCurrentPage" class="pagination-sm right" 
+					  max-size="5" ng-change="select(availableCurrentPage)" items-per-page="availableNumPerPage" rotate="false"
+					  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+		 </pagination>
+		</div>
+
+   	   </div>
+
+   	   <div class="panel panel-lined table-responsive mb30 ">
+        <div class="panel-heading"><i>Competencias seleccionadas</i></div>
+   	    
+   	    <table class="table table-bordered table-striped">
+   	   	 <thead>
+	      <th>Nombre
+	       <div class="th">
+	  	    <i class="fa fa-caret-up icon-up" ng-click=" order('name')" ng-class="{active: row == 'name'}"></i>
+	  	    <i class="fa fa-caret-down icon-down" ng-click=" order('-name')" ng-class="{active: row == '-name'}"></i>
+	 	   </div>
+		  </th>
+		  <th>Nivel requerido</th>
+		  <th></th>
+   	   	 </thead>
+   	   	 <tbody>
+          <tr ng-repeat="selectedSkill in selectedSkills track by $index">
+		   <td>
+    		<select name="id" class="form-control" ng-model="position.skill.id">
+     		 <option value="{{selectedSkill._id}}" selected>{{selectedSkill.name}}</option> 
+    		</select>
+		   </td>
+		   <td>
+    		<select name="level" class="form-control" ng-model="position.skill.level" ng-options="skillLevel._id as skillLevel.name for skillLevel in selectedSkill.levels" required>
+     		 <option value="">Selecciona un nivel</option> 
+    		</select>
+    		<p ng-show="newPositionForm.level.$invalid && !newPositionForm.level.$pristine" class="help-block">El nivel es requerido.</p>
+		   </td>
+		   <td><a href ng-click="remove($index)">Quitar</a></td>
+          </tr>
+   	   	 </tbody>
+   	    </table>
+   	   </div>
+
+   	   <div class="form-group">
+    	<button type="submit" class="btn btn-default" ng-disabled="newPositionForm.$invalid">Registrar</button> 
+    	<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
+   	   </div>
+
+ 	  </form>
+ 	 </modal>
+
 	</div>
    </div>
   </div>

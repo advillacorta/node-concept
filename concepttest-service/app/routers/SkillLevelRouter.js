@@ -82,4 +82,18 @@ router.delete('/:skillLevelId', function(request, response)
 	});
 });
 
+/*
+
+*/
+router.get('/skill/:skillId', function(request, response)
+{
+	SkillLevel.find({
+		skill: request.params.skillId
+	}, function(error, skillLevels)
+	{
+		if(error) { response.send(error); }
+		response.status(200).json(skillLevels);
+	});
+});
+
 module.exports = router;

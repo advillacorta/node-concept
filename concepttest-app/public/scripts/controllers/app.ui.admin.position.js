@@ -78,59 +78,139 @@ angular.module("app.ui.admin.position", [])
 				$scope.select($scope.currentPage);
 			});
 		}
-		
-		$scope.edit = function(id)
-		{
-			$window.location.href = '/#/admin/editPosition?id=' + id;
-		}
 
-		$scope.delete = function(id)
-		{
-			if(confirm("¿Está seguro que desea eliminar el cargo seleccionado?"))
-			{
-				positionService.deletePosition(id)
-				.then(function(response)
-				{
-					$route.reload();
-				});
-			}
-		}
+		$scope.showNew = false;
+	    $scope.toggleNew = function()
+	    {
+	        $scope.showNew = !$scope.showNew;
+	    };
 	}
 ])
 
 // Registro de cargo
-.controller('NewPosition', ["$scope", "$window", "positionService", "skillService", "skillLevelService", 
-	function($scope, $window, positionService, skillService, skillTypeService)
+.controller('NewPosition', ["$scope", "$filter", "$window", "positionService", "skillService", "skillLevelService", 
+	function($scope, $filter, $window, positionService, skillService, skillLevelService)
 	{
+		// Available skills
+		$scope.availableSkills;
+		$scope.availableFilteredData;
+		$scope.availableSearchKeywords = "";
+		$scope.availableRow = "";
+		$scope.availableNumPerPageOpts;
+		$scope.availableNumPerPage;
+		$scope.availableCurrentPage;
+		$scope.availableCurrentPageStores;
+
+		// Selected skills
+		$scope.selectedSkills = [];
+
 		$scope.init = function()
 		{
-			
+			skillService.getSkills()
+			.then(function(response)
+			{
+				$scope.availableSkills = response.data;
+
+				$scope.availableFilteredData = [];
+				$scope.availableSearchKeywords = "";
+				$scope.availableRow = "";
+
+				$scope.availableNumPerPageOpts = [5, 7, 10, 25, 50, 100];
+				$scope.availableNumPerPage = $scope.availableNumPerPageOpts[1];
+				$scope.availableCurrentPage = 1;
+				$scope.availableCurrentPageStores = [];
+
+				$scope.select = function(page) 
+				{
+					var start = (page - 1)*$scope.availableNumPerPage,
+						end = start + $scope.availableNumPerPage;
+	
+					$scope.availableCurrentPageStores = $scope.availableFilteredData.slice(start, end);
+				}
+
+				$scope.onFilterChange = function() 
+				{
+					$scope.select(1);
+					$scope.availableCurrentPage = 1;
+					$scope.availableRow = '';
+				}
+
+				$scope.onNumPerPageChange = function() 
+				{
+					$scope.select(1);
+					$scope.availableCurrentPage = 1;
+				}
+
+				$scope.onOrderChange = function() 
+				{
+					$scope.select(1);
+					$scope.availableCurrentPage = 1;
+				}
+
+				$scope.search = function() 
+				{
+					$scope.availableFilteredData = $filter("filter")($scope.availableSkills, $scope.availableSearchKeywords);
+					$scope.onFilterChange();
+				}
+
+				$scope.order = function(rowName) 
+				{
+					if($scope.availableRow == rowName)
+						return;
+					$scope.availableRow = rowName;
+					$scope.availableFilteredData = $filter('orderBy')($scope.availableSkills, rowName);
+					$scope.onOrderChange();
+				}
+
+				$scope.search();
+				$scope.select($scope.availableCurrentPage);
+			});
 		}
 		
+		$scope.add = function(index, skillId)
+		{
+			var skill = $scope.availableSkills[index];
+			$scope.availableSkills.splice(index, 1);
+
+			skillLevelService.getSkillLevelsBySkill(skillId)
+			.then(function(response)
+			{
+				skill.levels = response.data;
+				$scope.selectedSkills.push(skill);	
+			});
+
+			$scope.search();
+		}
+
+		$scope.remove = function(index)
+		{
+			$scope.availableSkills.push($scope.selectedSkills[index]);
+			$scope.selectedSkills.splice(index, 1);
+			$scope.search();
+		}
+
 		$scope.save = function(isValid)
 		{
 			if(isValid)
 			{
-				var data = $scope.skill;
+				var data = $scope.position;
+				console.log(angular.toJson($scope.position));
+				/*
 				positionService.createPosition(data)
 				.then(function(response)
 				{
 					alert("Registro satisfactorio");
 					$window.location.href = '/#/admin/positions';
 				});
+				*/
 			}
-		}
-		
-		$scope.cancel = function()
-		{
-			$window.location.href = '/#/admin/positions';
 		}
 	}
 ])
 
 // Edicion de cargo
-.controller('NewPosition', ["$scope", "$window", "positionService", "skillService", "skillLevelService", 
-	function($scope, $window, positionService, skillService, skillTypeService)
+.controller('EditPosition', ["$scope", "$window", "positionService", "skillService", "skillLevelService", 
+	function($scope, $window, positionService, skillService, skillLevelService)
 	{
 		$scope.init = function()
 		{

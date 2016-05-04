@@ -31,7 +31,7 @@
 	.directive('modal', function () {
 	    return {
 	      template: '<div class="modal fade">' + 
-	          '<div class="modal-dialog">' + 
+	          '<div class="modal-dialog {{ size }}">' + 
 	            '<div class="modal-content">' + 
 	              '<div class="modal-header">' + 
 	                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
@@ -47,6 +47,7 @@
 	      scope:true,
 	      link: function postLink(scope, element, attrs) {
 	        scope.title = attrs.title;
+	        scope.size = attrs.size;
 
 	        scope.$watch(attrs.visible, function(value)
 	        {
@@ -167,6 +168,44 @@
 		}
 
 		dataFactory.deleteSkillLevel = function(id)
+		{
+			return $http.delete(baseUrl + '/' + id);
+		}
+
+		dataFactory.getSkillLevelsBySkill = function(skillId)
+		{
+			return $http.get(baseUrl + '/skill/' + skillId);
+		}
+
+		return dataFactory;
+	}])
+
+	.factory('positionService', ['$http', function($http)
+	{
+		var baseUrl = 'http://localhost:8082/api/position';
+		var dataFactory = {};
+
+		dataFactory.getPositions = function()
+		{
+			return $http.get(baseUrl);
+		}
+
+		dataFactory.getPosition = function(id)
+		{
+			return $http.get(baseUrl + '/' + id);
+		}
+
+		dataFactory.createPosition = function(position)
+		{
+			return $http.post(baseUrl, position);
+		}
+
+		dataFactory.updatePosition = function(position)
+		{
+			return $http.put(baseUrl + '/' + position._id, position);
+		}
+
+		dataFactory.deletePosition = function(id)
 		{
 			return $http.delete(baseUrl + '/' + id);
 		}
