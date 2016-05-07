@@ -7,10 +7,10 @@ var mongoose   = require('mongoose');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost/concept');
+mongoose.connect('mongodb://' + process.env.IP + '/concept');
 
 // Set listening port
-var port = process.env.PORT || 8082;
+var port = 8082;
 
 //CORS middleware
 var allowCrossDomain = 

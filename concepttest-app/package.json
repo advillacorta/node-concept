@@ -8,6 +8,7 @@
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
     "body-parser": "~1.4.2",
+    "method-override" : "~2.0.2",
     "bcrypt-nodejs": "latest"
   },
   "devDependencies": {
