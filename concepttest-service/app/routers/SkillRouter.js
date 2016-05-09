@@ -9,9 +9,9 @@ var Skill      = require('./../models/Skill');
 /*
 
 */
-router.get('/', passport.authenticate('jwt', { session: false }), function(request, response)
+router.get('/', isAuthorized, function(request, response)
 {
-	var token = getToken(request.headers);
+	var token = request.token;
 	if(token)
 	{
 		var decoded = jwt.decode(token, config.secret);
@@ -23,7 +23,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(reque
 
 			if(!user)
 			{
-				return res.status(403).send({ success: false, message: 'Authentication failed. User not found.' });
+				return response.status(403).send({ success: false, message: 'Authentication failed. User not found.' });
 			}
 			else
 			{
@@ -103,24 +103,31 @@ router.delete('/:skillId', function(request, response)
 	});
 });
 
-getToken = function(headers)
+/*
+
+*/
+function isAuthorized(request, response, next)
 {
+	var token;
+	var headers = request.headers;
 	if(headers && headers.authorization)
 	{
 		var parted = headers.authorization.split(' ');
 		if(parted.length === 2)
 		{
-			return parted[1];
+			token = parted[1];
+			request.token = token;
+			next();
 		}
 		else
 		{
-			return null;
+			response.status(403).json({ success: false, message: 'Not authorized.' });
 		}
 	}
 	else
 	{
-		return null;
+		response.status(403).json({ success: false, message: 'Not authorized.' });
 	}
-};
+}
 
 module.exports = router;

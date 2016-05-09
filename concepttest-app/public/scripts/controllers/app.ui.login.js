@@ -4,17 +4,17 @@
 angular.module("app.ui.login", [])
 
 // Login
-.controller("Login", ["$scope", "$window", 
-	function($scope, $window)
+.controller("Login", ["$scope", "$window", "AuthService",
+	function($scope, $window, AuthService)
 	{
-		$scope.user = {
+		$scope.user =
+		{
 			username: '',
 			password: ''
 		}
 
 		$scope.login = function()
 		{
-			console.log('User: ' + angular.toJson($scope.user));
 			/*
 			AuthService.signin($scope.user)
 			.then(function(message)
@@ -29,10 +29,26 @@ angular.module("app.ui.login", [])
 	}
 ])
 
-.controller("Signup", ["$scope", "$window",
-	function($scope, $window)
+.controller("Signup", ["$scope", "$window", "AuthService",
+	function($scope, $window, AuthService)
 	{
+		$scope.user = 
+		{
+			username: '',
+			password: ''
+		}
 		
+		$scope.signup = function()
+		{
+			AuthService.signup($scope.user)
+			.then(function()
+			{
+					
+			}, function(error)
+			{
+
+			});
+		}
 	}
 ])
 
