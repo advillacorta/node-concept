@@ -25,8 +25,43 @@
 		"app.ui.admin.skill",
 		"app.ui.admin.skill.types",
 		"app.ui.admin.skill.levels",
-		"app.ui.admin.position"
+		"app.ui.admin.position",
 	])
+
+	angular.module("loginapp", [
+		/* Angular modules */
+		"ngRoute",
+		"ngAnimate",
+		"ngSanitize",
+
+		/* 3rd Party Modules */
+		"ui.bootstrap",
+		"ui.select",
+		"textAngular",
+		"angular-skycons",
+		"angular-loading-bar",
+
+		/* Custom Modules */
+		"app.ui.ctrls",
+		
+		/* App Modules */
+		"app.directives",
+		//"app.services",
+		"app.ctrls",
+
+		"app.ui.login"
+	])
+
+	// Application constants
+	.constant('AUTH_EVENTS',
+	{
+		notAuthenticated: 'auth-not-authenticated'
+	})
+
+	.constant('REST_API_ENDPOINT', 
+	{
+	  url: 'http://localhost:8082/api'
+	})
 
 	.directive('modal', function () {
 	    return {

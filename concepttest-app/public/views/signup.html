@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Appboard - Admin Template with Angularjs">
+  <meta name="keywords" content="appboard, webapp, admin, dashboard, template, ui">
+  <meta name="author" content="bootstraphunter">
+  <!-- <base href="/"> -->
+
+  <title>CSTI | Plataforma de evaluaci&oacute;n</title>
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="fonts/font-awesome/font-awesome.css">
+  
+  <!-- Css/Less Stylesheets -->
+  <link rel="stylesheet" href="styles/vendors/bootstrap.min.css">
+  <link rel="stylesheet" href="styles/main.css">
+
+  <!--Toastr -->
+  <link rel="stylesheet" href="styles/vendors/toastr.min.css">
+  
+  <!-- Match Media polyfill for IE9 -->
+  <!--[if IE 9]><!--> <script src="scripts/ie/matchMedia.js"></script>  <!--<![endif]--> 
+ </head>
+ <body ng-app="loginapp" id="loginapp" ng-controller="Signup" ng-init="init()">
+
+  <div class="page page-auth clearfix">
+
+   <div class="auth-container">
+    <h1 class="site-logo h2 mb15"><a href="/"><span>CSTI</span>&nbsp;CHAIN SERVICES</a></h1>
+
+    <div class="form-container">
+     <p class="small">¿Ya tienes una cuenta?. <a href="/login">Inicia sesi&oacute;n.</a></p>
+     <form class="form-horizontal" action="/">
+      <!--
+      <div class="row">
+       <div class="form-group form-group-lg col-lg-6">
+        <input class="form-control" type="text" placeholder="Nombres">
+       </div>
+
+       <div class="form-group form-group-lg col-lg-6">
+        <input class="form-control" type="text" placeholder="Apellidos">
+       </div>
+      </div>
+      -->
+      <div class="form-group form-group-lg">
+       <input class="form-control" type="text" placeholder="Nombre de usuario">
+      </div>
+
+      <div class="form-group form-group-lg">
+       <input class="form-control" type="password" placeholder="Contrase&ntilde;a">
+      </div>
+
+      <!--
+      <div class="form-group form-group-lg">
+       <input class="form-control" type="email" placeholder="john@gmail.com">
+      </div>
+      -->
+      <button type="submit" class="btn btn-lg btn-primary text-uppercase">Registrate</button>
+     </form>
+    </div>
+   </div>
+  </div>
+
+  <footer id="site-foot" class="site-foot clearfix">
+   <p class="left">&copy; Copyright 2016 <strong>CSTI | Chain Services Technology Information</strong>, Todos los derechos reservados.</p>
+   <p class="right">v1.0</p>
+  </footer>
+
+  <!-- Vendors -->
+  <script src="scripts/vendors/jquery.min.js"></script> <!-- load before angular -->
+  <script src="scripts/vendors/angular.min.js"></script>
+  <script src="scripts/vendors/bootstrap.min.js"></script>
+  <script src="scripts/vendors/toastr.min.js"></script>
+
+  <!-- Plugins -->
+  <script src="scripts/plugins/angular-route.min.js"></script>
+  <script src="scripts/plugins/angular-animate.min.js"></script>
+  <script src="scripts/plugins/angular-sanitize.min.js"></script>
+  <script src="scripts/plugins/ui-bootstrap-tpls.min.js"></script>
+  <script src="scripts/plugins/select.min.js"></script>
+  <script src="scripts/plugins/bootstrap-slider.min.js"></script>
+  <script src="scripts/plugins/textAngular.min.js"></script>
+  <script src="scripts/plugins/perfect-scrollbar.min.js"></script>
+  <script src="scripts/plugins/angular-skycons.min.js"></script>
+  <script src="scripts/plugins/loading-bar.min.js"></script>
+  
+  <!-- Custom scripts -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/shared/app.ctrls.js"></script>
+  <script src="scripts/shared/app.directives.js"></script>
+  <script src="scripts/ui/app.ui.ctrls.js"></script>
+  
+  <!-- App scripts -->
+  <script src="scripts/controllers/app.ui.login.js"></script>
+
+ </body>
+</html>
