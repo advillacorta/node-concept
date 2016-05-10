@@ -28,30 +28,6 @@
 		"app.ui.admin.position",
 	])
 
-	angular.module("loginapp", [
-		/* Angular modules */
-		"ngRoute",
-		"ngAnimate",
-		"ngSanitize",
-
-		/* 3rd Party Modules */
-		"ui.bootstrap",
-		"ui.select",
-		"textAngular",
-		"angular-skycons",
-		"angular-loading-bar",
-
-		/* Custom Modules */
-		"app.ui.ctrls",
-		
-		/* App Modules */
-		"app.directives",
-		//"app.services",
-		"app.ctrls",
-
-		"app.ui.login"
-	])
-
 	// Application constants
 	.constant('AUTH_EVENTS',
 	{
@@ -110,24 +86,6 @@
 	      }
 	    };
 	})
-	
-	.factory('AuthService', ['$http', function($http)
-	{
-		var baseUrl = 'http://localhost:8082/api/user';
-		var dataFactory = {};
-		
-		dataFactory.signin = function(user)
-		{
-			return $http.post(baseUrl + '/signin', user);
-		}
-		
-		dataFactory.signup = function(user)
-		{
-			return $http.post(baseUrl + '/signup', user);
-		}
-		
-		return dataFactory;
-	}])
 	
 	.factory('skillTypeService', ['$http', function($http)
 	{

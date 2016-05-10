@@ -15,6 +15,7 @@ angular.module("app.ui.login", [])
 
 		$scope.login = function()
 		{
+			window.location = '/home';
 			/*
 			AuthService.signin($scope.user)
 			.then(function(message)
@@ -51,5 +52,23 @@ angular.module("app.ui.login", [])
 		}
 	}
 ])
+
+.factory('AuthService', ['$http', function($http)
+{
+	var baseUrl = 'http://localhost:8082/api/user';
+	var dataFactory = {};
+	
+	dataFactory.signin = function(user)
+	{
+		return $http.post(baseUrl + '/signin', user);
+	}
+	
+	dataFactory.signup = function(user)
+	{
+		return $http.post(baseUrl + '/signup', user);
+	}
+	
+	return dataFactory;
+}])
 
 }())

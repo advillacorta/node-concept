@@ -29,6 +29,7 @@ module.exports = function(app) {
 	*/
 	// frontend routes =========================================================
 	// route to handle all angular requests
+	
 	app.get('/', function(req, res) 
 	{
 		res.redirect('/login');
@@ -38,7 +39,7 @@ module.exports = function(app) {
 	{
 		res.sendfile('./public/views/login.html');
 	});
-
+	
 	app.get('/signup', function(req, res) 
 	{
 		res.sendfile('./public/views/signup.html');
@@ -46,6 +47,6 @@ module.exports = function(app) {
 
 	app.get('/home', function(req, res) 
 	{
-		res.sendfile('./public/views/index.html');
+		res.sendfile('./public/index.html');
 	});
 };
