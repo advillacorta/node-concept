@@ -239,6 +239,8 @@
 	.config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
 
 		var routes = [
+			"admin/manageTests",
+			"admin/manageQuestions",
 		    "admin/managePositions",
 			"admin/manageSkills"
 		];
@@ -258,7 +260,7 @@
 		});
 
 		$routeProvider
-			.when("/", {redirectTo: "/admin/manageSkills"})
+			.when("/", {redirectTo: "/admin/manageTests"})
 			.when("/404", {templateUrl: "views/error/404.html"})
 			.otherwise({redirectTo: "/404"});
 	}])
