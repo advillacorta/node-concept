@@ -27,19 +27,21 @@
        <tr>
 	       <th>Nombre
 	        <div class="th">
-	         <i class="fa fa-caret-up icon-up" ng-click=" order('description')" ng-class="{active: row == 'description'}"></i>
-	         <i class="fa fa-caret-down icon-down" ng-click=" order('-description')" ng-class="{active: row == '-description'}"></i>
+	         <i class="fa fa-caret-up icon-up" ng-click=" order('name')" ng-class="{active: row == 'name'}"></i>
+	         <i class="fa fa-caret-down icon-down" ng-click=" order('-name')" ng-class="{active: row == '-name'}"></i>
 	        </div>
 	       </th>
+         <th>Descripci&oacute;n</th>
 	       <th></th>
 	       <th></th>
        </tr>
       </thead>
       <tbody>
-       <tr ng-repeat="question in currentPageStores track by $index">
-	       <td>{{question.description}}</td>
-	       <td><a href ng-click="toggleEdit(question._id)">Modificar</a></td>
-	       <td><a href ng-click="delete(question._id)">Eliminar</a></td>
+       <tr ng-repeat="project in currentPageStores track by $index">
+	       <td>{{project.name}}</td>
+         <td>{{project.description}}</td>
+	       <td><a href ng-click="toggleEdit(project._id)">Modificar</a></td>
+	       <td><a href ng-click="delete(project._id)">Eliminar</a></td>
        </tr>
       </tbody>
      </table>
@@ -53,6 +55,34 @@
     			  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
       </pagination>
      </div>
+
+     <!-- Registro de pregunta -->
+     <modal title="Registro de requerimiento" size="modal-lg" visible="showNew" data-backdrop="static">
+      <form role="form" name="newProjectForm" ng-controller="NewProject" ng-init="init()" ng-submit="save(newProjectForm.$valid)" novalidate>
+       <div class="form-group" ng-class="{'has-error' : newProjectForm.type.$invalid && !newProjectForm.type.$pristine}">
+        <label class="text-uppercase small text-bold">Tipo:</label>
+        <select name="type" class="form-control" ng-model="project.client">
+         <option value="">Selecciona un cliente</option> 
+        </select>
+        <p ng-show="newProjectForm.type.$invalid && !newProjectForm.type.$pristine" class="help-block">El cliente es requerido.</p>
+       </div>
+       <div class="form-group" ng-class="{'has-error' : newProjectForm.name.$invalid && !newProjectForm.name.$pristine}">
+        <label class="text-uppercase small text-bold">Nombre:</label>
+        <input type="text" name="name" class="form-control" ng-model="project.name" required>
+        <p ng-show="newProjectForm.name.$invalid && !newProjectForm.name.$pristine" class="help-block">El nombre es requerido.</p>
+       </div>
+       <div class="form-group" ng-class="{'has-error' : newProjectForm.description.$invalid && !newProjectForm.description.$pristine}">
+        <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
+        <input type="text" name="description" class="form-control" ng-model="project.description" required>
+        <p ng-show="newProjectForm.description.$invalid && !newProjectForm.description.$pristine" class="help-block">La descripci&oacute;n es requerida.</p>
+       </div>
+
+       <div class="form-group">
+        <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="newProjectForm.$invalid">Registrar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
+       </div>
+      </form>
+     </modal>
      
     </div>
    </div>

@@ -1,9 +1,9 @@
 ;(function() {
 "use strict";
 
-angular.module("app.ui.admin.questions", [])
+angular.module("app.ui.admin.projects", [])
 
-	.controller("ListQuestions", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "$location",
+	.controller("ListProjects", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "$location",
 		function($route, $rootScope, $scope, $filter, $window, $timeout, $location)
 		{
 			$scope.datas;
@@ -14,7 +14,7 @@ angular.module("app.ui.admin.questions", [])
 			$scope.currentPage;
 			$scope.currentPageStores;
 
-			function getQuestions()
+			function getProjects()
 			{
 				/*
 				skillService.getSkills()
@@ -78,7 +78,7 @@ angular.module("app.ui.admin.questions", [])
 
 			$scope.delete = function(id)
 			{
-				bootbox.confirm("¿Está seguro que desea eliminar la pregunta seleccionada?", function(result)
+				bootbox.confirm("¿Está seguro que desea eliminar el requerimiento seleccionado?", function(result)
 				{
 					if(result)
 					{
@@ -104,7 +104,7 @@ angular.module("app.ui.admin.questions", [])
 		    $scope.toggleEdit = function(id)
 		    {
 		        $scope.showEdit = !$scope.showEdit;
-		        $rootScope.$emit('handleEditQuestion', { id: id} );
+		        $rootScope.$emit('handleEditProject', { id: id} );
 		    };
 
 		    function reload()
@@ -112,13 +112,13 @@ angular.module("app.ui.admin.questions", [])
 		    	$route.reload();
 		    }
 
-		    $rootScope.$on('closeNewQuestionModal', function(event, params)
+		    $rootScope.$on('closeNewProjectModal', function(event, params)
 		    {
 		    	$scope.showNew = !$scope.showNew
 		    	$timeout(reload, 800);
 		    });
 
-		    $rootScope.$on('closeEditQuestionModal', function(event, params)
+		    $rootScope.$on('closeEditProjectModal', function(event, params)
 		    {
 		    	$scope.showEdit = !$scope.showEdit
 		    	$timeout(reload, 800);
@@ -126,27 +126,12 @@ angular.module("app.ui.admin.questions", [])
 		}
 	])
 
-	.controller("NewQuestion", ["$rootScope", "$scope", "$window",
+	.controller("NewProject", ["$rootScope", "$scope", "$window",
 		function($rootScope, $scope, $window)
 		{
 			$scope.init = function()
 			{
-				$scope.question = {
-					type: '',
-					description: '',
-					isMultipleChoice: true,
-					answers: []
-				}
-			}
 
-			$scope.addAnswer = function()
-			{
-				$scope.question.answers.push({ description: '', isCorrect: false });
-			}
-
-			$scope.removeAnswer = function(index)
-			{
-				$scope.question.answers.splice(index, 1);
 			}
 
 			$scope.save = function(isValid)
@@ -159,22 +144,12 @@ angular.module("app.ui.admin.questions", [])
 		}
 	])
 
-	.controller("EditQuestion", ["$rootScope", "$scope", "$routeParams", "$window",
+	.controller("EditProject", ["$rootScope", "$scope", "$routeParams", "$window",
 		function($rootScope, $scope, $routeParams, $window)
 		{
 			$scope.init = function()
 			{
 						
-			}
-
-			$scope.addAnswer = function()
-			{
-				$scope.question.answers.push({ description: '', isCorrect: false });
-			}
-
-			$scope.removeAnswer = function(index)
-			{
-				$scope.question.answers.splice(index, 1);
 			}
 
 			$scope.save = function(isValid)

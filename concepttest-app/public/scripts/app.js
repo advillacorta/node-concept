@@ -26,7 +26,8 @@
 		"app.ui.admin.skill.types",
 		"app.ui.admin.skill.levels",
 		"app.ui.admin.position",
-		"app.ui.admin.questions"
+		"app.ui.admin.questions",
+		"app.ui.admin.projects"
 	])
 
 	// Application constants
