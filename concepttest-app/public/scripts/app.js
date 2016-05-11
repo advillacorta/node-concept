@@ -26,6 +26,7 @@
 		"app.ui.admin.skill.types",
 		"app.ui.admin.skill.levels",
 		"app.ui.admin.position",
+		"app.ui.admin.questions"
 	])
 
 	// Application constants
@@ -239,6 +240,8 @@
 	.config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
 
 		var routes = [
+			"admin/manageTeams",
+			"admin/manageProjects",
 			"admin/manageTests",
 			"admin/manageQuestions",
 		    "admin/managePositions",

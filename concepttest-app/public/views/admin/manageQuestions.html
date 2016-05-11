@@ -2,6 +2,7 @@
 
  <ol class="breadcrumb breadcrumb-small">
   <li>Administraci&oacute;n</li>
+  <li>Evaluaciones</li>
   <li class="active">
    <a href="#/admin/manageQuestions">Preguntas</a>
   </li>
@@ -53,6 +54,77 @@
     			  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
       </pagination>
      </div>
+
+     <!-- Registro de pregunta -->
+     <modal title="Registro de pregunta" size="modal-lg" visible="showNew" data-backdrop="static">
+      <form role="form" name="newQuestionForm" ng-controller="NewQuestion" ng-init="init()" ng-submit="save(newQuestionForm.$valid)" novalidate>
+       <div class="form-group" ng-class="{'has-error' : newQuestionForm.type.$invalid && !newQuestionForm.type.$pristine}">
+        <label class="text-uppercase small text-bold">Tipo:</label>
+        <select name="type" class="form-control" ng-model="question.type">
+         <option value="">Selecciona un tipo</option> 
+        </select>
+        <p ng-show="newQuestionForm.type.$invalid && !newQuestionForm.type.$pristine" class="help-block">El tipo es requerido.</p>
+       </div>
+       <div class="form-group" ng-class="{'has-error' : newQuestionForm.description.$invalid && !newQuestionForm.description.$pristine}">
+        <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
+        <input type="text" name="description" class="form-control" ng-model="question.description" required>
+        <p ng-show="newQuestionForm.description.$invalid && !newQuestionForm.description.$pristine" class="help-block">La descripci&oacute;n es requerida.</p>
+       </div>
+       <div class="ui-checkbox ui-checkbox-default">
+        <label class="ui-checkbox-inline">
+         <input checked="" type="checkbox" name="isMultipleChoice" ng-model="question.isMultipleChoice"> 
+         <span>Selecci&oacute;n m&uacute;ltiple?</span>
+        </label>
+       </div>
+
+       <div class="form-group">
+        <button type="button" class="btn btn-default" ng-click="addAnswer()">Agregar respuesta</button> 
+       </div>
+
+       <table class="table table-bordered table-striped">
+        <thead>
+         <tr>
+           <th>Respuesta</th>
+           <th></th>
+           <th>Quitar</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr ng-repeat="(i, answer) in question.answers track by $index">
+           <td>
+            <input type="text" name="description" class="form-control" ng-model="question.answers[i].description"/>
+           </td>
+           <td>
+            <div ng-switch="question.isMultipleChoice">
+             <div ng-switch-when="true">
+              <div class="ui-checkbox ui-checkbox-default">
+               <label class="ui-checkbox-inline">
+                <input type="checkbox" name="isCorrect" ng-model="question.answers[i].isCorrect">
+                <span>Respuesta correcta</span>
+               </label>
+              </div>
+             </div>
+             <div ng-switch-default>
+              <div class="ui-radio ui-radio-info">
+               <label class="ui-radio-inline">
+                <input type="radio" name="isCorrect" ng-model="question.answers[i].isCorrect">
+                <span>Respuesta correcta</span>
+               </label>
+              </div>
+             </div>
+            </div>
+           </td>
+           <td><a href ng-click="removeAnswer($index)">Quitar</a></td>
+         </tr>
+        </tbody>
+       </table>
+
+       <div class="form-group">
+        <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="newQuestionForm.$invalid">Registrar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
+       </div>
+      </form>
+     </modal>
      
     </div>
    </div>
