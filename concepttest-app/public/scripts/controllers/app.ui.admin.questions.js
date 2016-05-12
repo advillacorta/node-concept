@@ -3,8 +3,8 @@
 
 angular.module("app.ui.admin.questions", [])
 
-	.controller("ListQuestions", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "$location",
-		function($route, $rootScope, $scope, $filter, $window, $timeout, $location)
+	.controller("ListQuestions", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "questionService",
+		function($route, $rootScope, $scope, $filter, $window, $timeout, questionService)
 		{
 			$scope.datas;
 			$scope.searchKeywords;
@@ -14,10 +14,12 @@ angular.module("app.ui.admin.questions", [])
 			$scope.currentPage;
 			$scope.currentPageStores;
 
+			getQuestions();
+
 			function getQuestions()
 			{
-				/*
-				skillService.getSkills()
+				
+				questionService.getQuestions()
 				.then(function(response)
 				{
 					$scope.datas = response.data;
@@ -73,7 +75,6 @@ angular.module("app.ui.admin.questions", [])
 					$scope.search();
 					$scope.select($scope.currentPage);
 				});
-				*/
 			}
 
 			$scope.delete = function(id)
@@ -82,14 +83,12 @@ angular.module("app.ui.admin.questions", [])
 				{
 					if(result)
 					{
-						/*
-						skillService.deleteSkill(id)
+						questionService.deleteQuestion(id)
 						.then(function(response)
 						{
 							toastr.success('Registro eliminado.');
 							reload();
 						});
-						*/
 					}
 				});
 			}
@@ -126,8 +125,8 @@ angular.module("app.ui.admin.questions", [])
 		}
 	])
 
-	.controller("NewQuestion", ["$rootScope", "$scope", "$window", "skillTypeService", "skillService",
-		function($rootScope, $scope, $window, skillTypeService, skillService)
+	.controller("NewQuestion", ["$rootScope", "$scope", "questionService", "skillTypeService", "skillService",
+		function($rootScope, $scope, questionService, skillTypeService, skillService)
 		{
 			$scope.skillTypes;
 			$scope.skills;
@@ -175,8 +174,12 @@ angular.module("app.ui.admin.questions", [])
 				{
 					if($scope.isValidAnswers())
 					{
-						// Call to service
-						console.log(angular.toJson($scope.question));
+						questionService.createQuestion($scope.question)
+						.then(function(response)
+						{
+							toastr.success('Registro satisfactorio');
+							$rootScope.$emit('closeNewQuestionModal', {});
+						});
 					}
 				}
 			}
@@ -234,8 +237,8 @@ angular.module("app.ui.admin.questions", [])
 		}
 	])
 
-	.controller("EditQuestion", ["$rootScope", "$scope", "$routeParams", "$window",
-		function($rootScope, $scope, $routeParams, $window)
+	.controller("EditQuestion", ["$rootScope", "$scope", "$routeParams", "questionService", "skillTypeService", "skillService",
+		function($rootScope, $scope, $routeParams, questionService, skillTypeService, skillService)
 		{
 			$scope.skillTypes;
 			$scope.skills;
@@ -243,8 +246,12 @@ angular.module("app.ui.admin.questions", [])
 
 			$scope.getQuestion = function(id)
 			{
-				// Call service
-				$scope.question;
+				questionService.getQuestion(id)
+				.then(function(response)
+				{
+					$scope.question = response.data;
+					$scope.getSkillsByType($scope.question.skillType);
+				});
 			}
 
 			$scope.getSkillTypes = function()
@@ -281,8 +288,12 @@ angular.module("app.ui.admin.questions", [])
 				{
 					if($scope.isValidAnswers())
 					{
-						// Call to service
-						console.log(angular.toJson($scope.question));
+						questionService.updateQuestion($scope.question)
+						.then(function(response)
+						{
+							toastr.success('Edición satisfactoria');
+							$rootScope.$emit('closeEditQuestionModal', {});
+						});
 					}
 				}
 			}

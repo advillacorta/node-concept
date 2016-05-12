@@ -132,7 +132,7 @@
       <form role="form" name="editQuestionForm" ng-controller="EditQuestion" ng-init="init()" ng-submit="save(editQuestionForm.$valid)" novalidate>
        <div class="form-group" ng-class="{'has-error' : editQuestionForm.skillType.$invalid && !editQuestionForm.skillType.$pristine}">
         <label class="text-uppercase small text-bold">Tipo:</label>
-        <select name="skillType" class="form-control" ng-model="question.skillType" ng-options="skillType._id as skillType.name for skillType in skillTypes" ng-change="getSkillsByType(question.skillType)" ng-init="getSkillsByType(question.skillType)" required>
+        <select name="skillType" class="form-control" ng-model="question.skillType" ng-options="skillType._id as skillType.name for skillType in skillTypes" ng-change="getSkillsByType(question.skillType)" required>
          <option value="">Selecciona un tipo</option> 
         </select>
         <p ng-show="editQuestionForm.skillType.$invalid && !editQuestionForm.skillType.$pristine" class="help-block">El tipo es requerido.</p>

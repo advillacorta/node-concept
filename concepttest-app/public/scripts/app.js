@@ -231,6 +231,49 @@
 		return dataFactory;
 	}])
 
+	.factory('questionService', ['$http', function($http)
+	{
+		var baseUrl = 'http://localhost:8082/api/question';
+		var dataFactory = {};
+
+		dataFactory.getQuestions = function()
+		{
+			return $http.get(baseUrl);
+		}
+
+		dataFactory.getQuestion = function(questionId)
+		{
+			return $http.get(baseUrl + '/' + questionId);
+		}
+
+		dataFactory.getQuestionsBySkillType = function(skillTypeId)
+		{
+			return $http.get(baseUrl + '/skillType/' + skillTypeId);
+		}
+
+		dataFactory.getQuestionsBySkill = function(skillId)
+		{
+			return $http.get(baseUrl + '/skill/' + skillId);
+		}
+
+		dataFactory.createQuestion = function(question)
+		{
+			return $http.post(baseUrl, question);
+		}
+
+		dataFactory.updateQuestion = function(question)
+		{
+			return $http.put(baseUrl + '/' + question._id, question);
+		}
+
+		dataFactory.deleteQuestion = function(questionId)
+		{
+			return $http.delete(baseUrl + '/' + questionId);
+		}
+
+		return dataFactory;
+	}])
+
 	// globally set ui-select theme
 	.config(["uiSelectConfig", function(uiSelectConfig) {
 		uiSelectConfig.theme = "bootstrap";
