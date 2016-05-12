@@ -126,22 +126,42 @@ angular.module("app.ui.admin.questions", [])
 		}
 	])
 
-	.controller("NewQuestion", ["$rootScope", "$scope", "$window",
-		function($rootScope, $scope, $window)
+	.controller("NewQuestion", ["$rootScope", "$scope", "$window", "skillTypeService", "skillService",
+		function($rootScope, $scope, $window, skillTypeService, skillService)
 		{
+			$scope.skillTypes;
+			$scope.skills;
+			$scope.maxAnwers = 4;
+
 			$scope.init = function()
 			{
 				$scope.question = {
-					type: '',
+					skillType: '',
+					skill: '',
 					description: '',
-					isMultipleChoice: true,
+					isMultipleChoice: false,
 					answers: []
 				}
+
+				skillTypeService.getSkillTypes()
+				.then(function(response)
+				{
+					$scope.skillTypes = response.data;
+				});
+			}
+
+			$scope.getSkillsByType = function(skillTypeId)
+			{	
+				skillService.getSkillsByType(skillTypeId)
+				.then(function(response)
+				{
+					$scope.skills = response.data;
+				});
 			}
 
 			$scope.addAnswer = function()
 			{
-				$scope.question.answers.push({ description: '', isCorrect: false });
+				$scope.question.answers.push({ description: '', score: 0, isCorrect: false });
 			}
 
 			$scope.removeAnswer = function(index)
@@ -153,8 +173,63 @@ angular.module("app.ui.admin.questions", [])
 			{
 				if(isValid)
 				{
-
+					if($scope.isValidAnswers())
+					{
+						// Call to service
+						console.log(angular.toJson($scope.question));
+					}
 				}
+			}
+
+			$scope.isValidAnswers = function()
+			{
+				var isValidAnswers = true;
+				if($scope.question.isMultipleChoice)
+				{
+					var countNotMarked = 0;
+					for(var i in $scope.question.answers)
+					{
+						if($scope.question.answers[i].isCorrect)
+						{
+							break;
+						}
+						else
+						{
+							countNotMarked++;
+						}
+					}
+
+					if(countNotMarked > 0)
+					{
+						toastr.warning('Debes marcar por lo menos 1 respuesta correcta.');
+						isValidAnswers = false;
+					}
+				}
+				else
+				{
+					var countNotMarked = 0;
+					var countMarked = 0;
+					for(var i in $scope.question.answers)
+					{
+						if($scope.question.answers[i].isCorrect)
+						{
+							countMarked++;
+						}
+					}
+
+					if(countMarked == 0)
+					{
+						toastr.warning('Debes marcar una respuesta correcta.');
+						isValidAnswers = false;
+					}
+					else if(countMarked > 1)
+					{
+						toastr.warning('Debes marcar una sola respuesta correcta.');
+						isValidAnswers = false;
+					}
+				}
+
+				return isValidAnswers;
 			}
 		}
 	])
@@ -162,9 +237,32 @@ angular.module("app.ui.admin.questions", [])
 	.controller("EditQuestion", ["$rootScope", "$scope", "$routeParams", "$window",
 		function($rootScope, $scope, $routeParams, $window)
 		{
-			$scope.init = function()
+			$scope.skillTypes;
+			$scope.skills;
+			$scope.maxAnwers = 4;
+
+			$scope.getQuestion = function(id)
 			{
-						
+				// Call service
+				$scope.question;
+			}
+
+			$scope.getSkillTypes = function()
+			{
+				skillTypeService.getSkillTypes()
+				.then(function(response)
+				{
+					$scope.skillTypes = response.data;
+				});
+			}
+
+			$scope.getSkillsByType = function(skillTypeId)
+			{	
+				skillService.getSkillsByType(skillTypeId)
+				.then(function(response)
+				{
+					$scope.skills = response.data;
+				});
 			}
 
 			$scope.addAnswer = function()
@@ -181,9 +279,72 @@ angular.module("app.ui.admin.questions", [])
 			{
 				if(isValid)
 				{
-
+					if($scope.isValidAnswers())
+					{
+						// Call to service
+						console.log(angular.toJson($scope.question));
+					}
 				}
 			}
+
+			$scope.isValidAnswers = function()
+			{
+				var isValidAnswers = true;
+				if($scope.question.isMultipleChoice)
+				{
+					var countNotMarked = 0;
+					for(var i in $scope.question.answers)
+					{
+						if($scope.question.answers[i].isCorrect)
+						{
+							break;
+						}
+						else
+						{
+							countNotMarked++;
+						}
+					}
+
+					if(countNotMarked > 0)
+					{
+						toastr.warning('Debes marcar por lo menos 1 respuesta correcta.');
+						isValidAnswers = false;
+					}
+				}
+				else
+				{
+					var countNotMarked = 0;
+					var countMarked = 0;
+					for(var i in $scope.question.answers)
+					{
+						if($scope.question.answers[i].isCorrect)
+						{
+							countMarked++;
+						}
+					}
+
+					if(countMarked == 0)
+					{
+						toastr.warning('Debes marcar una respuesta correcta.');
+						isValidAnswers = false;
+					}
+					else if(countMarked > 1)
+					{
+						toastr.warning('Debes marcar una sola respuesta correcta.');
+						isValidAnswers = false;
+					}
+				}
+
+				return isValidAnswers;
+			}
+
+			$rootScope.$on('handleEditQuestion', function(event, params)
+			{
+				var id = params.id;
+
+				$scope.getSkillTypes();
+				$scope.getQuestion(id);
+			});
 		}
 	])
 

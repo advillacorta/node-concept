@@ -58,12 +58,19 @@
      <!-- Registro de pregunta -->
      <modal title="Registro de pregunta" size="modal-lg" visible="showNew" data-backdrop="static">
       <form role="form" name="newQuestionForm" ng-controller="NewQuestion" ng-init="init()" ng-submit="save(newQuestionForm.$valid)" novalidate>
-       <div class="form-group" ng-class="{'has-error' : newQuestionForm.type.$invalid && !newQuestionForm.type.$pristine}">
+       <div class="form-group" ng-class="{'has-error' : newQuestionForm.skillType.$invalid && !newQuestionForm.skillType.$pristine}">
         <label class="text-uppercase small text-bold">Tipo:</label>
-        <select name="type" class="form-control" ng-model="question.type">
+        <select name="skillType" class="form-control" ng-model="question.skillType" ng-options="skillType._id as skillType.name for skillType in skillTypes" ng-change="getSkillsByType(question.skillType)" required>
          <option value="">Selecciona un tipo</option> 
         </select>
-        <p ng-show="newQuestionForm.type.$invalid && !newQuestionForm.type.$pristine" class="help-block">El tipo es requerido.</p>
+        <p ng-show="newQuestionForm.skillType.$invalid && !newQuestionForm.skillType.$pristine" class="help-block">El tipo es requerido.</p>
+       </div>
+       <div class="form-group" ng-class="{'has-error' : newQuestionForm.skill.$invalid && !newQuestionForm.skill.$pristine}">
+        <label class="text-uppercase small text-bold">Competencia:</label>
+        <select name="skill" class="form-control" ng-model="question.skill" ng-options="skill._id as skill.name for skill in skills" required>
+         <option value="">Selecciona una competencia</option> 
+        </select>
+        <p ng-show="newQuestionForm.skill.$invalid && !newQuestionForm.skill.$pristine" class="help-block">La competencias es requerida.</p>
        </div>
        <div class="form-group" ng-class="{'has-error' : newQuestionForm.description.$invalid && !newQuestionForm.description.$pristine}">
         <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
@@ -72,55 +79,49 @@
        </div>
        <div class="ui-checkbox ui-checkbox-default">
         <label class="ui-checkbox-inline">
-         <input checked="" type="checkbox" name="isMultipleChoice" ng-model="question.isMultipleChoice"> 
+         <input type="checkbox" name="isMultipleChoice" ng-model="question.isMultipleChoice"> 
          <span>Selecci&oacute;n m&uacute;ltiple?</span>
         </label>
        </div>
 
        <div class="form-group">
-        <button type="button" class="btn btn-default" ng-click="addAnswer()">Agregar respuesta</button> 
+        <button type="button" class="btn btn-default" ng-click="addAnswer()" ng-disabled="question.answers.length == maxAnwers">Agregar respuesta</button> 
        </div>
 
        <table class="table table-bordered table-striped">
         <thead>
          <tr>
-           <th>Respuesta</th>
-           <th></th>
+           <th>Descripci&oacute;n</th>
+           <th>¿Es correcta?</th>
+           <th>Puntaje</th>
            <th>Quitar</th>
          </tr>
         </thead>
         <tbody>
          <tr ng-repeat="(i, answer) in question.answers track by $index">
            <td>
-            <input type="text" name="description" class="form-control" ng-model="question.answers[i].description"/>
+            <input type="text" name="answerDescription" class="form-control" ng-model="question.answers[i].description" required/>
            </td>
            <td>
-            <div ng-switch="question.isMultipleChoice">
-             <div ng-switch-when="true">
-              <div class="ui-checkbox ui-checkbox-default">
-               <label class="ui-checkbox-inline">
-                <input type="checkbox" name="isCorrect" ng-model="question.answers[i].isCorrect">
-                <span>Respuesta correcta</span>
-               </label>
-              </div>
-             </div>
-             <div ng-switch-default>
-              <div class="ui-radio ui-radio-info">
-               <label class="ui-radio-inline">
-                <input type="radio" name="isCorrect" ng-model="question.answers[i].isCorrect">
-                <span>Respuesta correcta</span>
-               </label>
-              </div>
-             </div>
+            <div class="ui-checkbox ui-checkbox-default">
+             <label class="ui-checkbox-inline">
+              <input type="checkbox" name="isCorrect" ng-model="$parent.question.answers[i].isCorrect">
+              <span></span>
+             </label>
             </div>
            </td>
-           <td><a href ng-click="removeAnswer($index)">Quitar</a></td>
+           <td>
+            <input type="number" name="score" class="form-control" ng-model="question.answers[i].score"/>
+           </td>
+           <td>
+            <a href ng-click="removeAnswer($index)">Quitar</a>
+           </td>
          </tr>
         </tbody>
        </table>
 
        <div class="form-group">
-        <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="newQuestionForm.$invalid">Registrar</button>
+        <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="newQuestionForm.$invalid || question.answers.length == 0">Registrar</button>
         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
        </div>
       </form>
@@ -129,12 +130,19 @@
      <!-- Edicion de pregunta -->
      <modal title="Edici&oacute;n de pregunta" size="modal-lg" visible="showEdit" data-backdrop="static">
       <form role="form" name="editQuestionForm" ng-controller="EditQuestion" ng-init="init()" ng-submit="save(editQuestionForm.$valid)" novalidate>
-       <div class="form-group" ng-class="{'has-error' : editQuestionForm.type.$invalid && !editQuestionForm.type.$pristine}">
+       <div class="form-group" ng-class="{'has-error' : editQuestionForm.skillType.$invalid && !editQuestionForm.skillType.$pristine}">
         <label class="text-uppercase small text-bold">Tipo:</label>
-        <select name="type" class="form-control" ng-model="question.type">
+        <select name="skillType" class="form-control" ng-model="question.skillType" ng-options="skillType._id as skillType.name for skillType in skillTypes" ng-change="getSkillsByType(question.skillType)" ng-init="getSkillsByType(question.skillType)" required>
          <option value="">Selecciona un tipo</option> 
         </select>
-        <p ng-show="editQuestionForm.type.$invalid && !editQuestionForm.type.$pristine" class="help-block">El tipo es requerido.</p>
+        <p ng-show="editQuestionForm.skillType.$invalid && !editQuestionForm.skillType.$pristine" class="help-block">El tipo es requerido.</p>
+       </div>
+       <div class="form-group" ng-class="{'has-error' : editQuestionForm.skill.$invalid && !editQuestionForm.skill.$pristine}">
+        <label class="text-uppercase small text-bold">Competencia:</label>
+        <select name="skill" class="form-control" ng-model="question.skill" ng-options="skill._id as skill.name for skill in skills" required>
+         <option value="">Selecciona una competencia</option> 
+        </select>
+        <p ng-show="editQuestionForm.skill.$invalid && !editQuestionForm.skill.$pristine" class="help-block">La competencias es requerida.</p>
        </div>
        <div class="form-group" ng-class="{'has-error' : editQuestionForm.description.$invalid && !editQuestionForm.description.$pristine}">
         <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
@@ -143,55 +151,49 @@
        </div>
        <div class="ui-checkbox ui-checkbox-default">
         <label class="ui-checkbox-inline">
-         <input checked="" type="checkbox" name="isMultipleChoice" ng-model="question.isMultipleChoice"> 
+         <input type="checkbox" name="isMultipleChoice" ng-model="question.isMultipleChoice"> 
          <span>Selecci&oacute;n m&uacute;ltiple?</span>
         </label>
        </div>
 
        <div class="form-group">
-        <button type="button" class="btn btn-default" ng-click="addAnswer()">Agregar respuesta</button> 
+        <button type="button" class="btn btn-default" ng-click="addAnswer()" ng-disabled="question.answers.length == maxAnwers">Agregar respuesta</button> 
        </div>
 
        <table class="table table-bordered table-striped">
         <thead>
          <tr>
-           <th>Respuesta</th>
-           <th></th>
+           <th>Descripci&oacute;n</th>
+           <th>¿Es correcta?</th>
+           <th>Puntaje</th>
            <th>Quitar</th>
          </tr>
         </thead>
         <tbody>
          <tr ng-repeat="(i, answer) in question.answers track by $index">
            <td>
-            <input type="text" name="description" class="form-control" ng-model="question.answers[i].description"/>
+            <input type="text" name="answerDescription" class="form-control" ng-model="question.answers[i].description" required/>
            </td>
            <td>
-            <div ng-switch="question.isMultipleChoice">
-             <div ng-switch-when="true">
-              <div class="ui-checkbox ui-checkbox-default">
-               <label class="ui-checkbox-inline">
-                <input type="checkbox" name="isCorrect" ng-model="question.answers[i].isCorrect">
-                <span>Respuesta correcta</span>
-               </label>
-              </div>
-             </div>
-             <div ng-switch-default>
-              <div class="ui-radio ui-radio-info">
-               <label class="ui-radio-inline">
-                <input type="radio" name="isCorrect" ng-model="question.answers[i].isCorrect">
-                <span>Respuesta correcta</span>
-               </label>
-              </div>
-             </div>
+            <div class="ui-checkbox ui-checkbox-default">
+             <label class="ui-checkbox-inline">
+              <input type="checkbox" name="isCorrect" ng-model="$parent.question.answers[i].isCorrect">
+              <span></span>
+             </label>
             </div>
            </td>
-           <td><a href ng-click="removeAnswer($index)">Quitar</a></td>
+           <td>
+            <input type="number" name="score" class="form-control" ng-model="question.answers[i].score"/>
+           </td>
+           <td>
+            <a href ng-click="removeAnswer($index)">Quitar</a>
+           </td>
          </tr>
         </tbody>
        </table>
 
        <div class="form-group">
-        <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="newQuestionForm.$invalid">Editar</button>
+        <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="editQuestionForm.$invalid || question.answers.length == 0">Editar</button>
         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
        </div>
       </form>

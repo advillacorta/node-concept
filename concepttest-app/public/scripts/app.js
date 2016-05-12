@@ -137,6 +137,11 @@
 			return $http.get(baseUrl + '/' + id);
 		}
 
+		dataFactory.getSkillsByType = function(skillTypeId)
+		{
+			return $http.get(baseUrl + '/skillType/' + skillTypeId);
+		}
+
 		dataFactory.createSkill = function(skill)
 		{
 			return $http.post(baseUrl, skill);

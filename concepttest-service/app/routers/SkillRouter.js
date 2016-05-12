@@ -9,8 +9,14 @@ var Skill      = require('./../models/Skill');
 /*
 
 */
-router.get('/', isAuthorized, function(request, response)
+router.get('/', function(request, response)
 {
+	Skill.find(function(error, skills)
+	{
+		if(error) { response.send(error); }
+		response.status(200).json(skills);
+	});
+	/*
 	var token = request.token;
 	if(token)
 	{
@@ -35,6 +41,7 @@ router.get('/', isAuthorized, function(request, response)
 			}
 		});
 	}
+	*/
 });
 
 /*
@@ -47,6 +54,21 @@ router.get('/:skillId', function(request, response)
 	{
 		if(error) { response.send(error); }
 		response.status(200).json(skill);
+	});
+});
+
+/*
+
+*/
+router.get('/skillType/:skillTypeId', function(request, response)
+{
+	Skill.find({
+		type: request.params.skillTypeId
+	},
+	function(error, skills)
+	{
+		if(error) { response.send(error); }
+		response.status(200).json(skills);
 	});
 });
 

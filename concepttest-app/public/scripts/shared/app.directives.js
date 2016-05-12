@@ -108,7 +108,7 @@ angular.module("app.directives", [])
 						if(path.indexOf(href) == 0)
 							li.addClass("active");
 
-						console.log(path, href,  path.indexOf(href));
+						//console.log(path, href,  path.indexOf(href));
 					})
 				};
 
@@ -206,9 +206,3 @@ angular.module("app.directives", [])
 
 
 }())
-
-
-
-
-
-
