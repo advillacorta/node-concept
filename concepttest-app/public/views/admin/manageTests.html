@@ -19,7 +19,7 @@
       </form>
 
       <form class="form-horizontal right col-lg-4">
-       <input type="text" class="form-control input-sm" placeholder="Buscar..." data-ng-model="searchKeywords" data-ng-keyup="searchPublished()">
+       <input type="text" class="form-control input-sm" placeholder="Buscar..." data-ng-model="searchKeywords" data-ng-keyup="search()">
       </form>
      </div>
 
@@ -72,8 +72,8 @@
        <tr>
          <th>Nombre
           <div class="th">
-           <i class="fa fa-caret-up icon-up" ng-click=" order('name')" ng-class="{active: row == 'name'}"></i>
-           <i class="fa fa-caret-down icon-down" ng-click=" order('-name')" ng-class="{active: row == '-name'}"></i>
+           <i class="fa fa-caret-up icon-up" ng-click=" orderDraft('name')" ng-class="{active: rowDraft == 'name'}"></i>
+           <i class="fa fa-caret-down icon-down" ng-click=" orderDraft('-name')" ng-class="{active: rowDraft == '-name'}"></i>
           </div>
          </th>
          <th></th>
@@ -95,7 +95,7 @@
       Mostrando {{currentPageStoresDraft.length*(currentPageDraft - 1) + 1}} a {{currentPageStoresDraft.length*currentPageDraft}} de {{datasDraft.length}} registros
       </p>
       <pagination boundary-links="true" total-items="filteredDataDraft.length" ng-model="currentPageDraft" class="pagination-sm right" 
-            max-size="5" ng-change="select(currentPageDraft)" items-per-page="numPerPageDraft" rotate="false"
+            max-size="5" ng-change="selectDraft(currentPageDraft)" items-per-page="numPerPageDraft" rotate="false"
             previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
       </pagination>
      </div>

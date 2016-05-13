@@ -47,6 +47,7 @@ router.use('/skillLevel', require('./app/routers/SkillLevelRouter'));
 router.use('/skillType', require('./app/routers/SkillTypeRouter'));
 router.use('/skill', require('./app/routers/SkillRouter'));
 router.use('/question', require('./app/routers/QuestionRouter'));
+router.use('/test', require('./app/routers/TestRouter'));
 
 // Register our routes
 app.use('/api', router);

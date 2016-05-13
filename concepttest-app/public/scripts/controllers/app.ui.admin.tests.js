@@ -3,8 +3,8 @@
 
 angular.module("app.ui.admin.tests", ['ui.sortable'])
 
-	.controller("ListTests", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout",
-		function($route, $rootScope, $scope, $filter, $window, $timeout)
+	.controller("ListTests", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "testService",
+		function($route, $rootScope, $scope, $filter, $window, $timeout, testService)
 		{
 			// Evaluaciones publicadas
 			$scope.datas;
@@ -25,11 +25,11 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 			$scope.currentPageStoresDraft;
 
 			getPublishedTests();
+			getDraftTests();
 
 			function getPublishedTests()
 			{
-				/*
-				questionService.getQuestions()
+				testService.getActiveTests()
 				.then(function(response)
 				{
 					$scope.datas = response.data;
@@ -85,17 +85,71 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 					$scope.search();
 					$scope.select($scope.currentPage);
 				});
-				*/
 			}
 
 			function getDraftTests()
 			{
+				testService.getInactiveTests()
+				.then(function(response)
+				{
+					$scope.datasDraft = response.data;
 
+					$scope.searchKeywordsDraft = "";
+					$scope.filteredDataDraft = [];	
+					$scope.rowDraft = "";
+
+					$scope.numPerPageOptsDraft = [5, 7, 10, 25, 50, 100];
+					$scope.numPerPageDraft = $scope.numPerPageOptsDraft[1];
+					$scope.currentPageDraft = 1;
+					$scope.currentPageStoresDraft = []; // data to hold per pagination
+
+
+					$scope.selectDraft = function(page) {
+						var start = (page - 1)*$scope.numPerPageDraft,
+							end = start + $scope.numPerPageDraft;
+
+						$scope.currentPageStores = $scope.filteredData.slice(start, end);
+					}
+
+					$scope.onFilterChangeDraft = function() {
+						$scope.selectDraft(1);
+						$scope.currentPageDraft = 1;
+						$scope.rowDraft = '';
+					}
+
+					$scope.onNumPerPageChangeDraft = function() {
+						$scope.selectDraft(1);
+						$scope.currentPageDraft = 1;
+					}
+
+					$scope.onOrderChangeDraft = function() {
+						$scope.selectDraft(1);
+						$scope.currentPageDraft = 1;
+					}
+
+
+					$scope.searchDraft = function() {
+						$scope.filteredDataDraft = $filter("filter")($scope.datasDraft, $scope.searchKeywordsDraft);
+						$scope.onFilterChangeDraft();
+					}
+
+					$scope.orderDraft = function(rowName) {
+						if($scope.rowDraft == rowName)
+							return;
+						$scope.rowDraft = rowName;
+						$scope.filteredDataDraft = $filter('orderBy')($scope.datas, rowName);
+						$scope.onOrderChangeDraft();
+					}
+
+					// init
+					$scope.searchDraft();
+					$scope.selectDraft($scope.currentPageDraft);
+				});
 			}
 
 			$scope.delete = function(id)
 			{
-				bootbox.confirm("¿Está seguro que desea eliminar la pregunta seleccionada?", function(result)
+				bootbox.confirm("¿Está seguro que desea eliminar la evaluaci&oacute;n seleccionada?", function(result)
 				{
 
 				});
@@ -119,15 +173,15 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 			$scope.steps = [true, false, false];
 
 			$scope.availableQuestions = [];
-			$scope.availableQuestions.push({id: '1', name: 'Pregunta 1'});
-			$scope.availableQuestions.push({id: '2', name: 'Pregunta 2'});
-			$scope.availableQuestions.push({id: '3', name: 'Pregunta 3'});
-			$scope.availableQuestions.push({id: '4', name: 'Pregunta 4'});
+			$scope.availableQuestions.push({_id: '1', name: 'Pregunta 1'});
+			$scope.availableQuestions.push({_id: '2', name: 'Pregunta 2'});
+			$scope.availableQuestions.push({_id: '3', name: 'Pregunta 3'});
+			$scope.availableQuestions.push({_id: '4', name: 'Pregunta 4'});
 
 			$scope.selectedQuestions = [];
 
 			$scope.test = {
-				description: '',
+				name: '',
 				questions: [],
 			}
 
