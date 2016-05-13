@@ -16,18 +16,18 @@
 
 		/* Custom Modules */
 		"app.ui.ctrls",
-		
-		/* App Modules */
+		"app.ui.form.ctrls",
 		"app.directives",
-		//"app.services",
 		"app.ctrls",
 		
+		/* App Modules */
 		"app.ui.admin.skill",
 		"app.ui.admin.skill.types",
 		"app.ui.admin.skill.levels",
 		"app.ui.admin.position",
+		"app.ui.admin.projects",
 		"app.ui.admin.questions",
-		"app.ui.admin.projects"
+		"app.ui.admin.tests"
 	])
 
 	// Application constants
@@ -289,6 +289,7 @@
 	.config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
 
 		var routes = [
+			"admin/newTest",
 			"admin/manageTeams",
 			"admin/manageProjects",
 			"admin/manageTests",
