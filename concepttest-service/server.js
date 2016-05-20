@@ -50,6 +50,7 @@ router.use('/question', require('./app/routers/QuestionRouter'));
 router.use('/test', require('./app/routers/TestRouter'));
 router.use('/customer', require('./app/routers/CustomerRouter'));
 router.use('/project', require('./app/routers/ProjectRouter'));
+router.use('/assignment', require('./app/routers/AssignmentRouter'));
 
 // Register our routes
 app.use('/api', router);
