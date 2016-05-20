@@ -40,6 +40,8 @@ router.post('/', function(request, response)
 {
 	var customer = new Customer();
 	customer.name = request.body.name;
+	customer.address = request.body.address;
+	customer.phoneNumber = request.body.phoneNumber;
 	customer.isActive = request.body.isActive;
 
 	customer.save(function(error)
@@ -59,6 +61,8 @@ router.put('/:customerId', function(request, response)
 		if(error) { response.send(error); }
 
 		customer.name = request.body.name;
+		customer.address = request.body.address;
+		customer.phoneNumber = request.body.phoneNumber;
 		customer.isActive = request.body.isActive;
 
 		customer.save(function(error)
