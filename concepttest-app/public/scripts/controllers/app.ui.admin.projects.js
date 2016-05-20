@@ -3,8 +3,8 @@
 
 angular.module("app.ui.admin.projects", [])
 
-	.controller("ListProjects", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "$location",
-		function($route, $rootScope, $scope, $filter, $window, $timeout, $location)
+	.controller("ListProjects", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "$location", "projectService"
+		function($route, $rootScope, $scope, $filter, $window, $timeout, $location, projectService)
 		{
 			$scope.datas;
 			$scope.searchKeywords;
@@ -16,8 +16,7 @@ angular.module("app.ui.admin.projects", [])
 
 			function getProjects()
 			{
-				/*
-				skillService.getSkills()
+				projectService.getProjects()
 				.then(function(response)
 				{
 					$scope.datas = response.data;
@@ -73,7 +72,6 @@ angular.module("app.ui.admin.projects", [])
 					$scope.search();
 					$scope.select($scope.currentPage);
 				});
-				*/
 			}
 
 			$scope.delete = function(id)
@@ -82,14 +80,12 @@ angular.module("app.ui.admin.projects", [])
 				{
 					if(result)
 					{
-						/*
-						skillService.deleteSkill(id)
+						projectService.deleteProject(id)
 						.then(function(response)
 						{
 							toastr.success('Registro eliminado.');
 							reload();
 						});
-						*/
 					}
 				});
 			}
@@ -126,38 +122,79 @@ angular.module("app.ui.admin.projects", [])
 		}
 	])
 
-	.controller("NewProject", ["$rootScope", "$scope", "$window",
-		function($rootScope, $scope, $window)
+	.controller("NewProject", ["$rootScope", "$scope", "$window", "customerService", "projectService"
+		function($rootScope, $scope, $window, customerService, projectService)
 		{
+			$scope.customers;
+
 			$scope.init = function()
 			{
-
+				customerService.getCustomers()
+				.then(function(response)
+				{
+					$scope.customers = response.data;
+				});
 			}
 
 			$scope.save = function(isValid)
 			{
 				if(isValid)
 				{
-
+					var data = $scope.project;
+					projectService.createProject(data)
+					.then(function(response)
+					{
+						toastr.success("Registro satisfactorio");
+						$rootScope.emit("closeNewProjectModal", {});
+					});
 				}
 			}
 		}
 	])
 
-	.controller("EditProject", ["$rootScope", "$scope", "$routeParams", "$window",
-		function($rootScope, $scope, $routeParams, $window)
+	.controller("EditProject", ["$rootScope", "$scope", "$routeParams", "$window", "customerService", "projectService"
+		function($rootScope, $scope, $routeParams, $window, customerService, projectService)
 		{
-			$scope.init = function()
+			$scope.customers;
+
+			function getProject(id)
 			{
-						
+				projectService.getProject(id)
+				.then(function(response)
+				{
+					$scope.project = response.data;
+				});
+			}
+
+			function getCustomers()
+			{
+				customerService.getCustomers()
+				.then(function(response)
+				{
+					$scope.customers = response.data;
+				});
 			}
 
 			$scope.save = function(isValid)
 			{
 				if(isValid)
 				{
-
+					var data = $scope.project;
+					projectService.updateProject(data)
+					.then(function(response)
+					{
+						toastr.success('Edición satisfactoria');
+						$rootScope.$emit('closeEditProjectModal', {});
+					});
 				}
+			}
+
+			$rootScope.$on('handleEditProject', function(event, params)
+			{
+				var id = params.id;
+
+				getCustomers();
+				getProject(id);
 			}
 		}
 	])

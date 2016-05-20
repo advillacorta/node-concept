@@ -56,15 +56,19 @@
       </pagination>
      </div>
 
-     <!-- Registro de pregunta -->
-     <modal title="Registro de requerimiento" size="modal-lg" visible="showNew" data-backdrop="static">
-      <form role="form" name="newProjectForm" ng-controller="NewProject" ng-init="init()" ng-submit="save(newProjectForm.$valid)" novalidate>
-       <div class="form-group" ng-class="{'has-error' : newProjectForm.type.$invalid && !newProjectForm.type.$pristine}">
-        <label class="text-uppercase small text-bold">Tipo:</label>
-        <select name="type" class="form-control" ng-model="project.client">
+     <!-- Registro de requerimiento -->
+     <modal title="Registro de requerimiento" visible="showNew" data-backdrop="static">
+      <form role="form" name="newProjectForm" ng-controller="EditProject" ng-init="init()" ng-submit="save(newProjectForm.$valid)" novalidate>
+       <div class="form-group" ng-class="{'has-error' : newProjectForm.customer.$invalid && !newProjectForm.customer.$pristine}">
+        <label class="text-uppercase small text-bold">Cliente:</label>
+        <select name="customer" 
+          class="form-control" 
+          ng-model="project.customer"
+          ng-options="customer._id as customer.name for customer in customers"
+          required>
          <option value="">Selecciona un cliente</option> 
         </select>
-        <p ng-show="newProjectForm.type.$invalid && !newProjectForm.type.$pristine" class="help-block">El cliente es requerido.</p>
+        <p ng-show="newProjectForm.customer.$invalid && !newProjectForm.customer.$pristine" class="help-block">El cliente es requerido.</p>
        </div>
        <div class="form-group" ng-class="{'has-error' : newProjectForm.name.$invalid && !newProjectForm.name.$pristine}">
         <label class="text-uppercase small text-bold">Nombre:</label>
@@ -79,6 +83,38 @@
 
        <div class="form-group">
         <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="newProjectForm.$invalid">Registrar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
+       </div>
+      </form>
+     </modal>
+
+     <!-- Edicion de requerimiento -->
+     <modal title="Edici&oacute;n de requerimiento" visible="showEdit" data-backdrop="static">
+      <form role="form" name="editProjectForm" ng-controller="EditProject" ng-submit="save(editProjectForm.$valid)" novalidate>
+       <div class="form-group" ng-class="{'has-error' : editProjectForm.customer.$invalid && !editProjectForm.customer.$pristine}">
+        <label class="text-uppercase small text-bold">Cliente:</label>
+        <select name="customer" 
+          class="form-control" 
+          ng-model="project.customer"
+          ng-options="customer._id as customer.name for customer in customers"
+          required>
+         <option value="">Selecciona un cliente</option> 
+        </select>
+        <p ng-show="editProjectForm.customer.$invalid && !editProjectForm.customer.$pristine" class="help-block">El cliente es requerido.</p>
+       </div>
+       <div class="form-group" ng-class="{'has-error' : editProjectForm.name.$invalid && !editProjectForm.name.$pristine}">
+        <label class="text-uppercase small text-bold">Nombre:</label>
+        <input type="text" name="name" class="form-control" ng-model="project.name" required>
+        <p ng-show="editProjectForm.name.$invalid && !editProjectForm.name.$pristine" class="help-block">El nombre es requerido.</p>
+       </div>
+       <div class="form-group" ng-class="{'has-error' : editProjectForm.description.$invalid && !editProjectForm.description.$pristine}">
+        <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
+        <input type="text" name="description" class="form-control" ng-model="project.description" required>
+        <p ng-show="editProjectForm.description.$invalid && !editProjectForm.description.$pristine" class="help-block">La descripci&oacute;n es requerida.</p>
+       </div>
+
+       <div class="form-group">
+        <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="editProjectForm.$invalid">Editar</button>
         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
        </div>
       </form>
