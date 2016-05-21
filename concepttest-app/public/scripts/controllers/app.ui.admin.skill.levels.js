@@ -211,4 +211,42 @@ angular.module("app.ui.admin.skill.levels", [])
 	}
 ])
 
+.factory('skillLevelService', ['$http', function($http)
+{
+	var baseUrl = 'http://localhost:8082/api/skillLevel';
+	var dataFactory = {};
+
+	dataFactory.getSkillLevels = function()
+	{
+		return $http.get(baseUrl);
+	}
+
+	dataFactory.getSkillLevel = function(id)
+	{
+		return $http.get(baseUrl + '/' + id);
+	}
+
+	dataFactory.createSkillLevel = function(skill)
+	{
+		return $http.post(baseUrl, skill);
+	}
+
+	dataFactory.updateSkillLevel = function(skill)
+	{
+		return $http.put(baseUrl + '/' + skill._id, skill);
+	}
+
+	dataFactory.deleteSkillLevel = function(id)
+	{
+		return $http.delete(baseUrl + '/' + id);
+	}
+
+	dataFactory.getSkillLevelsBySkill = function(skillId)
+	{
+		return $http.get(baseUrl + '/skill/' + skillId);
+	}
+
+	return dataFactory;
+}])
+
 }())

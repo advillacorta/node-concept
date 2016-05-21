@@ -205,4 +205,42 @@ angular.module("app.ui.admin.skill", [])
 	}
 ])
 
+.factory('skillService', ['$http', function($http)
+{
+	var baseUrl = 'http://localhost:8082/api/skill';
+	var dataFactory = {};
+
+	dataFactory.getSkills = function()
+	{
+		return $http.get(baseUrl);
+	}
+
+	dataFactory.getSkill = function(id)
+	{
+		return $http.get(baseUrl + '/' + id);
+	}
+
+	dataFactory.getSkillsByType = function(skillTypeId)
+	{
+		return $http.get(baseUrl + '/skillType/' + skillTypeId);
+	}
+
+	dataFactory.createSkill = function(skill)
+	{
+		return $http.post(baseUrl, skill);
+	}
+
+	dataFactory.updateSkill = function(skill)
+	{
+		return $http.put(baseUrl + '/' + skill._id, skill);
+	}
+
+	dataFactory.deleteSkill = function(id)
+	{
+		return $http.delete(baseUrl + '/' + id);
+	}
+
+	return dataFactory;
+}])
+
 }())

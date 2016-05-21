@@ -241,4 +241,41 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 		}
 	])
 
+	.factory('testService', ['$http', function($http)
+	{
+		var baseUrl = 'http://localhost:8082/api/test';
+		var dataFactory = [];
+
+		dataFactory.getTests = function()
+		{
+			return $http.get(baseUrl);
+		}
+
+		dataFactory.getActiveTests = function()
+		{
+			return $http.get(baseUrl + '/state/active');
+		}
+
+		dataFactory.getInactiveTests = function()
+		{
+			return $http.get(baseUrl + '/state/inactive');
+		}
+
+		dataFactory.createTest = function(test)
+		{
+			return $http.post(baseUrl, test);
+		}
+
+		dataFactory.updateTest = function(test)
+		{
+			return $http.put(baseUrl + '/' + test._id, test);
+		}
+
+		dataFactory.deleteTest = function(testId)
+		{
+			return $http.delete(baseUrl + '/' + testId);
+		}
+
+		return dataFactory;
+	}])
 }())

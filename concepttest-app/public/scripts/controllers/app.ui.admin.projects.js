@@ -201,4 +201,36 @@ angular.module("app.ui.admin.projects", [])
 		}
 	])
 
+	.factory('projectService', ['$http', function($http)
+	{
+		var baseUrl = 'http://localhost:8082/api/project';
+		var dataFactory = [];
+
+		dataFactory.getProjects = function()
+		{
+			return $http.get(baseUrl);
+		}
+
+		dataFactory.getProject = function(projectId)
+		{
+			return $http.get(baseUrl + '/' + projectId);
+		}
+
+		dataFactory.createProject = function(project)
+		{
+			return $http.post(baseUrl, project);
+		}
+
+		dataFactory.updateProject = function(project)
+		{
+			return $http.put(baseUrl + '/' + project._id, project);
+		}
+
+		dataFactory.deleteProject = function(projectId)
+		{
+			return $http.delete(baseUrl + '/' + projectId);
+		}
+
+		return dataFactory;
+	}])
 }())

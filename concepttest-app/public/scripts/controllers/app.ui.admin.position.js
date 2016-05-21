@@ -435,6 +435,39 @@ angular.module("app.ui.admin.position", [])
 			getPosition(id);
 		});
 	}
-])	
+])
+
+.factory('positionService', ['$http', function($http)
+{
+	var baseUrl = 'http://localhost:8082/api/position';
+	var dataFactory = {};
+
+	dataFactory.getPositions = function()
+	{
+		return $http.get(baseUrl);
+	}
+
+	dataFactory.getPosition = function(id)
+	{
+		return $http.get(baseUrl + '/' + id);
+	}
+
+	dataFactory.createPosition = function(position)
+	{
+		return $http.post(baseUrl, position);
+	}
+
+	dataFactory.updatePosition = function(position)
+	{
+		return $http.put(baseUrl + '/' + position._id, position);
+	}
+
+	dataFactory.deletePosition = function(id)
+	{
+		return $http.delete(baseUrl + '/' + id);
+	}
+
+	return dataFactory;
+}])
 
 }())
