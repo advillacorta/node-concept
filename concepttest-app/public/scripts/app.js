@@ -77,262 +77,6 @@
 	      }
 	    };
 	})
-	
-	.factory('skillTypeService', ['$http', function($http)
-	{
-		var baseUrl = 'http://localhost:8082/api/skillType';
-		var dataFactory = {};
-
-		dataFactory.getSkillTypes = function()
-		{
-			return $http.get(baseUrl);
-		}
-
-		dataFactory.getSkillType = function(id)
-		{
-			return $http.get(baseUrl + '/' + id);
-		}
-
-		dataFactory.createSkillType = function(skillType)
-		{
-			return $http.post(baseUrl, skillType);
-		}
-
-		dataFactory.updateSkillType = function(skillType)
-		{
-			return $http.put(baseUrl + '/' + skillType._id, skillType);
-		}
-
-		dataFactory.deleteSkillType = function(id)
-		{
-			return $http.delete(baseUrl + '/' + id);
-		}
-
-		return dataFactory;
-	}])
-	
-	.factory('skillService', ['$http', function($http)
-	{
-		var baseUrl = 'http://localhost:8082/api/skill';
-		var dataFactory = {};
-
-		dataFactory.getSkills = function()
-		{
-			return $http.get(baseUrl);
-		}
-
-		dataFactory.getSkill = function(id)
-		{
-			return $http.get(baseUrl + '/' + id);
-		}
-
-		dataFactory.getSkillsByType = function(skillTypeId)
-		{
-			return $http.get(baseUrl + '/skillType/' + skillTypeId);
-		}
-
-		dataFactory.createSkill = function(skill)
-		{
-			return $http.post(baseUrl, skill);
-		}
-
-		dataFactory.updateSkill = function(skill)
-		{
-			return $http.put(baseUrl + '/' + skill._id, skill);
-		}
-
-		dataFactory.deleteSkill = function(id)
-		{
-			return $http.delete(baseUrl + '/' + id);
-		}
-
-		return dataFactory;
-	}])
-
-	.factory('skillLevelService', ['$http', function($http)
-	{
-		var baseUrl = 'http://localhost:8082/api/skillLevel';
-		var dataFactory = {};
-
-		dataFactory.getSkillLevels = function()
-		{
-			return $http.get(baseUrl);
-		}
-
-		dataFactory.getSkillLevel = function(id)
-		{
-			return $http.get(baseUrl + '/' + id);
-		}
-
-		dataFactory.createSkillLevel = function(skill)
-		{
-			return $http.post(baseUrl, skill);
-		}
-
-		dataFactory.updateSkillLevel = function(skill)
-		{
-			return $http.put(baseUrl + '/' + skill._id, skill);
-		}
-
-		dataFactory.deleteSkillLevel = function(id)
-		{
-			return $http.delete(baseUrl + '/' + id);
-		}
-
-		dataFactory.getSkillLevelsBySkill = function(skillId)
-		{
-			return $http.get(baseUrl + '/skill/' + skillId);
-		}
-
-		return dataFactory;
-	}])
-
-	.factory('positionService', ['$http', function($http)
-	{
-		var baseUrl = 'http://localhost:8082/api/position';
-		var dataFactory = {};
-
-		dataFactory.getPositions = function()
-		{
-			return $http.get(baseUrl);
-		}
-
-		dataFactory.getPosition = function(id)
-		{
-			return $http.get(baseUrl + '/' + id);
-		}
-
-		dataFactory.createPosition = function(position)
-		{
-			return $http.post(baseUrl, position);
-		}
-
-		dataFactory.updatePosition = function(position)
-		{
-			return $http.put(baseUrl + '/' + position._id, position);
-		}
-
-		dataFactory.deletePosition = function(id)
-		{
-			return $http.delete(baseUrl + '/' + id);
-		}
-
-		return dataFactory;
-	}])
-
-	.factory('questionService', ['$http', function($http)
-	{
-		var baseUrl = 'http://localhost:8082/api/question';
-		var dataFactory = {};
-
-		dataFactory.getQuestions = function()
-		{
-			return $http.get(baseUrl);
-		}
-
-		dataFactory.getQuestion = function(questionId)
-		{
-			return $http.get(baseUrl + '/' + questionId);
-		}
-
-		dataFactory.getQuestionsBySkillType = function(skillTypeId)
-		{
-			return $http.get(baseUrl + '/skillType/' + skillTypeId);
-		}
-
-		dataFactory.getQuestionsBySkill = function(skillId)
-		{
-			return $http.get(baseUrl + '/skill/' + skillId);
-		}
-
-		dataFactory.createQuestion = function(question)
-		{
-			return $http.post(baseUrl, question);
-		}
-
-		dataFactory.updateQuestion = function(question)
-		{
-			return $http.put(baseUrl + '/' + question._id, question);
-		}
-
-		dataFactory.deleteQuestion = function(questionId)
-		{
-			return $http.delete(baseUrl + '/' + questionId);
-		}
-
-		return dataFactory;
-	}])
-
-	.factory('testService', ['$http', function($http)
-	{
-		var baseUrl = 'http://localhost:8082/api/test';
-		var dataFactory = [];
-
-		dataFactory.getTests = function()
-		{
-			return $http.get(baseUrl);
-		}
-
-		dataFactory.getActiveTests = function()
-		{
-			return $http.get(baseUrl + '/state/active');
-		}
-
-		dataFactory.getInactiveTests = function()
-		{
-			return $http.get(baseUrl + '/state/inactive');
-		}
-
-		dataFactory.createTest = function(test)
-		{
-			return $http.post(baseUrl, test);
-		}
-
-		dataFactory.updateTest = function(test)
-		{
-			return $http.put(baseUrl + '/' + test._id, test);
-		}
-
-		dataFactory.deleteTest = function(testId)
-		{
-			return $http.delete(baseUrl + '/' + testId);
-		}
-
-		return dataFactory;
-	}])
-
-	.factory('projectService', ['$http', function($http)
-	{
-		var baseUrl = 'http://localhost:8082/api/project';
-		var dataFactory = [];
-
-		dataFactory.getProjects = function()
-		{
-			return $http.get(baseUrl);
-		}
-
-		dataFactory.getProject = function(projectId)
-		{
-			return $http.get(baseUrl + '/' + projectId);
-		}
-
-		dataFactory.createProject = function(project)
-		{
-			return $http.post(baseUrl, project);
-		}
-
-		dataFactory.updateProject = function(project)
-		{
-			return $http.put(baseUrl + '/' + project._id, project);
-		}
-
-		dataFactory.deleteProject = function(projectId)
-		{
-			return $http.delete(baseUrl + '/' + projectId);
-		}
-
-		return dataFactory;
-	}])
 
 	.factory('customerService', ['$http', function($http)
 	{
@@ -362,6 +106,49 @@
 		dataFactory.deleteCustomer = function(customerId)
 		{
 			return $http.delete(baseUrl + '/' + customerId);
+		}
+
+		return dataFactory;
+	}])
+
+	.factory('employeeService', ['$http', function($http)
+	{
+		var baseUrl = 'http://localhost:8082/api/employee';
+		var dataFactory = [];
+
+		dataFactory.getEmployees = function()
+		{
+			return $http.get(baseUrl);
+		}
+
+		dataFactory.getAssignableEmployees = function()
+		{
+			return $http.get(baseUrl + '/state/available');
+		}
+
+		dataFactory.getEmployee = function(employeeId)
+		{
+			return $http.get(baseUrl + '/' + employeeId);
+		}
+
+		dataFactory.createEmployee = function(employee)
+		{
+			return $http.post(baseUrl, employee);
+		}
+
+		dataFactory.updateEmployee = function(employee)
+		{
+			return $http.put(baseUrl + '/' + employee._id, employee);
+		}
+
+		dataFactory.updateEmployeeAvailability = function(employee)
+		{
+			return $http.put(baseUrl + '/setavailable/' + employee._id + '/' + employee.isAssigned, employee);
+		}
+
+		dataFactory.deleteEmployee = function(employeeId)
+		{
+			return $http.delete(baseUrl + '/' + employeeId);
 		}
 
 		return dataFactory;
