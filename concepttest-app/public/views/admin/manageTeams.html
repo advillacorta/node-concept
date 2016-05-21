@@ -53,6 +53,39 @@
     			  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
       </pagination>
      </div>
+
+     <!-- Registro de requerimiento -->
+     <modal title="Registro de equipo de trabajo" size="modal-lg" visible="showNew" data-backdrop="static">
+      <form role="form" name="newTeamForm" ng-controller="NewTeam" ng-init="init()" ng-submit="save(newTeamForm.$valid)" novalidate>
+       <div class="form-group" ng-class="{'has-error' : newTeamForm.customer.$invalid && !newTeamForm.customer.$pristine}">
+        <label class="text-uppercase small text-bold">Cliente:</label>
+        <select name="customer" 
+          class="form-control" 
+          ng-model="team.customer"
+          ng-options="customer._id as customer.name for customer in customers"
+          ng-change="selectCustomer(team.customer)"
+          required>
+         <option value="">Selecciona un cliente</option> 
+        </select>
+        <p ng-show="newTeamForm.customer.$invalid && !newTeamForm.customer.$pristine" class="help-block">El cliente es requerido.</p>
+       </div>
+       <div class="form-group" ng-class="{'has-error' : newTeamForm.requirement.$invalid && !newTeamForm.requirement.$pristine}">
+        <label class="text-uppercase small text-bold">Requerimiento:</label>
+        <select name="requirement" 
+          class="form-control" 
+          ng-model="team.requirement"
+          ng-options="requirement._id as requirement.name for requirement in requirements"
+          required>
+         <option value="">Selecciona un requerimiento</option> 
+        </select>
+        <p ng-show="newTeamForm.requirement.$invalid && !newTeamForm.requirement.$pristine" class="help-block">El requerimiento es requerido.</p>
+       </div>
+       <div class="form-group" ng-class="{'has-error' : newTeamForm.description.$invalid && !newTeamForm.description.$pristine}">
+        <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
+        <input type="text" name="description" class="form-control" ng-model="team.description" required>
+        <p ng-show="newTeamForm.description.$invalid && !newTeamForm.description.$pristine" class="help-block">La descripci&oacute;n es requerida.</p>
+       </div>
+     </modal>
      
     </div>
    </div>

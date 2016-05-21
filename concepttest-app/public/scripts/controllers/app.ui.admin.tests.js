@@ -108,7 +108,7 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 						var start = (page - 1)*$scope.numPerPageDraft,
 							end = start + $scope.numPerPageDraft;
 
-						$scope.currentPageStores = $scope.filteredData.slice(start, end);
+						$scope.currentPageStores = $scope.filteredDataDraft.slice(start, end);
 					}
 
 					$scope.onFilterChangeDraft = function() {

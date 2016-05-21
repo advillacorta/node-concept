@@ -1,10 +1,10 @@
 ;(function() {
 "use strict";
 
-angular.module("app.ui.admin.projects", [])
+angular.module("app.ui.admin.teams", [])
 
-	.controller("ListTeams", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "$location", "assignmentService",
-		function($route, $rootScope, $scope, $filter, $window, $timeout, $location, assignmentService)
+	.controller("ListTeams", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "$location",
+		function($route, $rootScope, $scope, $filter, $window, $timeout, $location)
 		{
 			$scope.datas;
 			$scope.searchKeywords;
@@ -14,8 +14,8 @@ angular.module("app.ui.admin.projects", [])
 			$scope.currentPage;
 			$scope.currentPageStores;
 
-			getAssignments();
-
+			
+			/*
 			function getAssignments()
 			{
 				assignmentService.getAssignments()
@@ -75,6 +75,7 @@ angular.module("app.ui.admin.projects", [])
 					$scope.select($scope.currentPage);
 				});
 			}
+			*/
 
 			$scope.showNew = false;
 		    $scope.toggleNew = function()
@@ -108,14 +109,28 @@ angular.module("app.ui.admin.projects", [])
 		}
 	])
 
-	.controller("NewTeam", ["$rootScope", "$scope", "$window", "assignmentService", "employeeService", "projectService",
-		function($rootScope, $scope, $window, assignmentService, employeeService, projectService)
+	.controller("NewTeam", ["$rootScope", "$scope", "$window", "employeeService", "customerService", "projectService",
+		function($rootScope, $scope, $window, employeeService, customerService, projectService)
 		{
 			$scope.customers;
+			$scope.requirements;
 
 			$scope.init = function()
 			{
+				customerService.getCustomers()
+				.then(function(response)
+				{
+					$scope.customers = response.data;
+				});
+			}
 
+			$scope.selectCustomer = function(id)
+			{
+				projectService.getProjectsByCustomer(id)
+				.then(function(response)
+				{
+					$scope.requirements = response.data;
+				});
 			}
 
 			$scope.save = function(isValid)
@@ -128,8 +143,8 @@ angular.module("app.ui.admin.projects", [])
 		}
 	])
 
-	.controller("EditTeam", ["$rootScope", "$scope", "$routeParams", "$window", "assignmentService", "employeeService", "projectService",
-		function($rootScope, $scope, $routeParams, $window, assignmentService, employeeService, projectService)
+	.controller("EditTeam", ["$rootScope", "$scope", "$routeParams", "$window", "employeeService",
+		function($rootScope, $scope, $routeParams, $window, employeeService)
 		{
 			$scope.customers;
 

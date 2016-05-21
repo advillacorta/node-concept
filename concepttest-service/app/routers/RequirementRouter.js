@@ -32,6 +32,20 @@ router.get('/:requirementId', function(request, response)
 	});
 });
 
+/*
+	Retrieves all requirements for a specific customer
+*/
+router.get('/customer/:customerId', function(request, response)
+{
+	Requirement.find({
+		customer: request.params.customerId
+	}, function(error, requirements)
+	{
+		if(error) { response.send(error); }
+		response.status(200).json(requirements);
+	});
+});
+
 
 /*
 	Creates a new requirement

@@ -216,6 +216,11 @@ angular.module("app.ui.admin.projects", [])
 			return $http.get(baseUrl + '/' + projectId);
 		}
 
+		dataFactory.getProjectsByCustomer = function(customerId)
+		{
+			return $http.get(baseUrl + '/customer/' + customerId);
+		}
+
 		dataFactory.createProject = function(project)
 		{
 			return $http.post(baseUrl, project);

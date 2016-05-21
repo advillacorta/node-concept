@@ -27,6 +27,7 @@
 		"app.ui.admin.position",
 		"app.ui.admin.projects",
 		"app.ui.admin.questions",
+		"app.ui.admin.teams",
 		"app.ui.admin.tests"
 	])
 
