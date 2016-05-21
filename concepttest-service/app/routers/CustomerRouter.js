@@ -12,7 +12,10 @@ var mongoose = require('mongoose');
 */
 router.get('/', function(request, response)
 {
-	Customer.find(function(error, customers)
+	Customer.find(
+	{
+		isActive: true
+	}, function(error, customers)
 	{
 		if(error) { response.send(error); }
 

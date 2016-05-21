@@ -3,7 +3,7 @@
 
 angular.module("app.ui.admin.projects", [])
 
-	.controller("ListProjects", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "$location", "projectService"
+	.controller("ListProjects", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "$location", "projectService",
 		function($route, $rootScope, $scope, $filter, $window, $timeout, $location, projectService)
 		{
 			$scope.datas;
@@ -13,6 +13,8 @@ angular.module("app.ui.admin.projects", [])
 			$scope.numPerPage;
 			$scope.currentPage;
 			$scope.currentPageStores;
+
+			getProjects();
 
 			function getProjects()
 			{
@@ -122,7 +124,7 @@ angular.module("app.ui.admin.projects", [])
 		}
 	])
 
-	.controller("NewProject", ["$rootScope", "$scope", "$window", "customerService", "projectService"
+	.controller("NewProject", ["$rootScope", "$scope", "$window", "customerService", "projectService",
 		function($rootScope, $scope, $window, customerService, projectService)
 		{
 			$scope.customers;
@@ -145,14 +147,14 @@ angular.module("app.ui.admin.projects", [])
 					.then(function(response)
 					{
 						toastr.success("Registro satisfactorio");
-						$rootScope.emit("closeNewProjectModal", {});
+						$rootScope.$emit("closeNewProjectModal", {});
 					});
 				}
 			}
 		}
 	])
 
-	.controller("EditProject", ["$rootScope", "$scope", "$routeParams", "$window", "customerService", "projectService"
+	.controller("EditProject", ["$rootScope", "$scope", "$routeParams", "$window", "customerService", "projectService",
 		function($rootScope, $scope, $routeParams, $window, customerService, projectService)
 		{
 			$scope.customers;
@@ -195,7 +197,7 @@ angular.module("app.ui.admin.projects", [])
 
 				getCustomers();
 				getProject(id);
-			}
+			});
 		}
 	])
 

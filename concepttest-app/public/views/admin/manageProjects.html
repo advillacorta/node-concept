@@ -58,7 +58,7 @@
 
      <!-- Registro de requerimiento -->
      <modal title="Registro de requerimiento" visible="showNew" data-backdrop="static">
-      <form role="form" name="newProjectForm" ng-controller="EditProject" ng-init="init()" ng-submit="save(newProjectForm.$valid)" novalidate>
+      <form role="form" name="newProjectForm" ng-controller="NewProject" ng-init="init()" ng-submit="save(newProjectForm.$valid)" novalidate>
        <div class="form-group" ng-class="{'has-error' : newProjectForm.customer.$invalid && !newProjectForm.customer.$pristine}">
         <label class="text-uppercase small text-bold">Cliente:</label>
         <select name="customer" 
