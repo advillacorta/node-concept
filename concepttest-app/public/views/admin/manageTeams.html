@@ -36,8 +36,8 @@
        </tr>
       </thead>
       <tbody>
-       <tr ng-repeat="question in currentPageStores track by $index">
-	       <td>{{question.description}}</td>
+       <tr ng-repeat="assignment in currentPageStores track by $index">
+	       <td>{{assignment.description}}</td>
 	       <td><a href ng-click="toggleEdit(question._id)">Modificar</a></td>
 	       <td><a href ng-click="delete(question._id)">Eliminar</a></td>
        </tr>
