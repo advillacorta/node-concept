@@ -54,7 +54,7 @@
       </pagination>
      </div>
 
-     <!-- Registro de requerimiento -->
+     <!-- Registro de asignacion -->
      <modal title="Registro de equipo de trabajo" size="modal-lg" visible="showNew" data-backdrop="static">
       <form role="form" name="newTeamForm" ng-controller="NewTeam" ng-init="init()" ng-submit="save(newTeamForm.$valid)" novalidate>
        <div class="form-group" ng-class="{'has-error' : newTeamForm.customer.$invalid && !newTeamForm.customer.$pristine}">
@@ -84,6 +84,47 @@
         <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
         <input type="text" name="description" class="form-control" ng-model="team.description" required>
         <p ng-show="newTeamForm.description.$invalid && !newTeamForm.description.$pristine" class="help-block">La descripci&oacute;n es requerida.</p>
+       </div>
+       <div class="form-group">
+        <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="newTeamForm.$invalid">Registrar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
+       </div>
+     </modal>
+     
+     <!-- Edicion de asignacion -->
+     <modal title="Edici&oacute;n de equipo de trabajo" size="modal-lg" visible="showEdit" data-backdrop="static">
+      <form role="form" name="editTeamForm" ng-controller="EditTeam" ng-submit="save(editTeamForm.$valid)" novalidate>
+       <div class="form-group" ng-class="{'has-error' : editTeamForm.customer.$invalid && !editTeamForm.customer.$pristine}">
+        <label class="text-uppercase small text-bold">Cliente:</label>
+        <select name="customer" 
+          class="form-control" 
+          ng-model="team.customer"
+          ng-options="customer._id as customer.name for customer in customers"
+          ng-change="selectCustomer(team.customer)"
+          required>
+         <option value="">Selecciona un cliente</option> 
+        </select>
+        <p ng-show="editTeamForm.customer.$invalid && !editTeamForm.customer.$pristine" class="help-block">El cliente es requerido.</p>
+       </div>
+       <div class="form-group" ng-class="{'has-error' : editTeamForm.requirement.$invalid && !editTeamForm.requirement.$pristine}">
+        <label class="text-uppercase small text-bold">Requerimiento:</label>
+        <select name="requirement" 
+          class="form-control" 
+          ng-model="team.requirement"
+          ng-options="requirement._id as requirement.name for requirement in requirements"
+          required>
+         <option value="">Selecciona un requerimiento</option> 
+        </select>
+        <p ng-show="editTeamForm.requirement.$invalid && !editTeamForm.requirement.$pristine" class="help-block">El requerimiento es requerido.</p>
+       </div>
+       <div class="form-group" ng-class="{'has-error' : editTeamForm.description.$invalid && !editTeamForm.description.$pristine}">
+        <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
+        <input type="text" name="description" class="form-control" ng-model="team.description" required>
+        <p ng-show="editTeamForm.description.$invalid && !editTeamForm.description.$pristine" class="help-block">La descripci&oacute;n es requerida.</p>
+       </div>
+       <div class="form-group">
+        <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="editTeamForm.$invalid">Editar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
        </div>
      </modal>
      
