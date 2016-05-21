@@ -51,6 +51,7 @@ router.use('/test', require('./app/routers/TestRouter'));
 router.use('/customer', require('./app/routers/CustomerRouter'));
 router.use('/project', require('./app/routers/RequirementRouter'));
 router.use('/assignment', require('./app/routers/AssignmentRouter'));
+router.use('/employee', require('./app/routers/EmployeeRouter'));
 
 // Register our routes
 app.use('/api', router);
