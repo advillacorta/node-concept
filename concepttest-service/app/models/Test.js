@@ -5,6 +5,10 @@ var Schema   = mongoose.Schema;
 
 var TestSchema = new Schema({
 	name: String,
+	type: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'TestType'
+	},
 	isActive: Boolean,
 	questions: ['Question']
 },

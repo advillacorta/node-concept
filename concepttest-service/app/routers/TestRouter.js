@@ -4,6 +4,7 @@ var passport   = require('passport');
 var config	   = require('./../../config/database');
 var jwt        = require('jwt-simple');
 var User       = require('./../models/User');
+var TestType   = require('./../models/TestType');
 var Test       = require('./../models/Test');
 var mongoose = require('mongoose');
 
@@ -17,6 +18,16 @@ router.get('/', function(request, response)
 		if(error) { response.send(error); }
 
 		response.status(200).json(tests);
+	});
+});
+
+router.get('/types/all', function(request, response)
+{
+	TestType.find(function(error, testTypes)
+	{
+		if(error) { response.send(error); }
+
+		response.status(200).json(testTypes);
 	});
 });
 

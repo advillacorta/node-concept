@@ -39,7 +39,7 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 					$scope.row = "";
 
 					$scope.numPerPageOpts = [5, 7, 10, 25, 50, 100];
-					$scope.numPerPage = $scope.numPerPageOpts[1];
+					$scope.numPerPage = $scope.numPerPageOpts[2];
 					$scope.currentPage = 1;
 					$scope.currentPageStores = []; // data to hold per pagination
 
@@ -108,7 +108,7 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 						var start = (page - 1)*$scope.numPerPageDraft,
 							end = start + $scope.numPerPageDraft;
 
-						$scope.currentPageStores = $scope.filteredDataDraft.slice(start, end);
+						$scope.currentPageStoresDraft = $scope.filteredDataDraft.slice(start, end);
 					}
 
 					$scope.onFilterChangeDraft = function() {
@@ -137,7 +137,7 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 						if($scope.rowDraft == rowName)
 							return;
 						$scope.rowDraft = rowName;
-						$scope.filteredDataDraft = $filter('orderBy')($scope.datas, rowName);
+						$scope.filteredDataDraft = $filter('orderBy')($scope.datasDraft, rowName);
 						$scope.onOrderChangeDraft();
 					}
 
@@ -167,22 +167,34 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 		}
 	])
 
-	.controller("NewTest", ["$rootScope", "$scope", "$filter",
-		function($rootScope, $scope, $filter)
+	.controller("NewTest", ["$rootScope", "$scope", "$filter", "questionService", "testService",
+		function($rootScope, $scope, $filter, questionService, testService)
 		{	
-			$scope.steps = [true, false, false];
-
-			$scope.availableQuestions = [];
-			$scope.availableQuestions.push({_id: '1', name: 'Pregunta 1'});
-			$scope.availableQuestions.push({_id: '2', name: 'Pregunta 2'});
-			$scope.availableQuestions.push({_id: '3', name: 'Pregunta 3'});
-			$scope.availableQuestions.push({_id: '4', name: 'Pregunta 4'});
-
+			$scope.steps = [true, false];
+			$scope.types;
+			$scope.availableQuestions
 			$scope.selectedQuestions = [];
 
 			$scope.test = {
-				name: '',
 				questions: [],
+			}
+
+			$scope.getAvailableQuestions = function()
+			{
+				questionService.getQuestions()
+				.then(function(response)
+				{
+					$scope.availableQuestions = response.data;
+				});
+			}
+
+			$scope.getTestTypes = function()
+			{
+				testService.getTestTypes()
+				.then(function(response)
+				{
+					$scope.types = response.data;
+				});
 			}
 
 			$scope.stepNext = function(index) 
@@ -214,6 +226,14 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 				}
 			}
 
+			$scope.showPreview = false;
+			$scope.preview = function(index)
+			{	
+				$scope.test.questions = $scope.selectedQuestions;
+				$rootScope.$emit('handlePreviewTest', { test: $scope.test} );
+				$scope.showPreview = !$scope.showPreview;
+			}
+
 			$scope.stepReset = function() 
 			{
 				$scope.steps = [true, false, false];
@@ -231,6 +251,34 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 					}
 				}
 			}
+
+			$scope.showDetail = false;
+			$scope.selectedQuestion;
+			$scope.showQuestionDetail = function(index)
+			{
+				$scope.showDetail = !$scope.showDetail;
+				$scope.selectedQuestion = $scope.selectedQuestions[index];
+			}
+
+			$scope.save = function(isValid)
+			{
+				if(isValid)
+				{
+					$scope.test.questions = $scope.selectedQuestions;
+					console.log(angular.toJson($scope.test));
+					
+					testService.createTest($scope.test)
+					.then(function(response)
+					{
+						toastr.success('Registro satisfactorio');
+						// REDIRECCIONAR
+					});
+				}
+			}
+
+			// Init
+			$scope.getTestTypes();
+			$scope.getAvailableQuestions();
 		}
 	])
 
@@ -238,6 +286,80 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 		function($rootScope, $scope, $routeParams)
 		{
 
+		}
+	])
+
+	.controller("PreviewTest", ["$rootScope", "$scope", "$filter",
+		function($rootScope, $scope, $filter)
+		{
+			$scope.datas;
+			$scope.searchKeywords;
+			$scope.filteredData;
+			$scope.numPerPageOpts;
+			$scope.numPerPage;
+			$scope.currentPage;
+			$scope.currentPageStores;
+
+			$scope.previewTest = function()
+			{
+				console.log(angular.toJson($scope.datas));
+				$scope.searchKeywords = "";
+				$scope.filteredData = [];	
+				$scope.row = "";
+
+				$scope.numPerPageOpts = [1];
+				$scope.numPerPage = $scope.numPerPageOpts[0];
+				$scope.currentPage = 1;
+				$scope.currentPageStores = []; // data to hold per pagination
+
+
+				$scope.select = function(page) {
+					var start = (page - 1)*$scope.numPerPage,
+						end = start + $scope.numPerPage;
+
+					$scope.currentPageStores = $scope.filteredData.slice(start, end);
+				}
+
+				$scope.onFilterChange = function() {
+					$scope.select(1);
+					$scope.currentPage = 1;
+					$scope.row = '';
+				}
+
+				$scope.onNumPerPageChange = function() {
+					$scope.select(1);
+					$scope.currentPage = 1;
+				}
+
+				$scope.onOrderChange = function() {
+					$scope.select(1);
+					$scope.currentPage = 1;
+				}
+
+				$scope.search = function() {
+					$scope.filteredData = $filter("filter")($scope.datas, $scope.searchKeywords);
+					$scope.onFilterChange();
+				}
+
+				$scope.order = function(rowName) {
+					if($scope.row == rowName)
+						return;
+					$scope.row = rowName;
+					$scope.filteredData = $filter('orderBy')($scope.datas, rowName);
+					$scope.onOrderChange();
+				}
+
+				// init
+				$scope.search();
+				$scope.select($scope.currentPage);
+			}
+
+
+			$rootScope.$on('handlePreviewTest', function(event, params)
+			{
+				$scope.datas = params.test.questions;
+				$scope.previewTest();
+			});
 		}
 	])
 
@@ -249,6 +371,11 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 		dataFactory.getTests = function()
 		{
 			return $http.get(baseUrl);
+		}
+
+		dataFactory.getTestTypes = function()
+		{
+			return $http.get(baseUrl + '/types/all');
 		}
 
 		dataFactory.getActiveTests = function()

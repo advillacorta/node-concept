@@ -22,10 +22,6 @@
         </li>
         <li ng-class="{active: steps[1]}">
          <span class="text">Configuraci&oacute;n</span>
-         <i class="fa fa-long-arrow-right"></i>
-        </li>
-        <li ng-class="{active: steps[2]}">
-         <span class="text">Previsualizaci&oacute;n</span>
         </li>
        </ul>
        <hr class="dashed mb30"/>
@@ -37,6 +33,25 @@
           <label class="text-uppercase small text-bold">Descripci&oacute;n:</label>
           <input type="text" name="name" class="form-control" ng-model="test.name" required>
           <p ng-show="newTestForm.name.$invalid && !newTestForm.name.$pristine" class="help-block">El nombre es requerido.</p>
+         </div>
+         <div class="form-group" ng-class="{'has-error' : newTestForm.type.$invalid && !newTestForm.type.$pristine}">
+          <label class="text-uppercase small text-bold">Tipo de evaluaci&oacute;n:</label>
+          <select name="skillType" 
+            class="form-control" 
+            ng-model="test.type" 
+            ng-options="type._id as type.name for type in types" required>
+           <option value="">Selecciona un tipo de evaluaci&oacute;n</option>
+          </select>
+          <p ng-show="newTestForm.type.$invalid && !newTestForm.type.$pristine" class="help-block">El tipo es requerido.</p>
+         </div>
+         <div class="form-group" ng-class="{'has-error' : newTestForm.isActive.$invalid && !newTestForm.isActive.$pristine}">
+          <label class="text-uppercase small text-bold">Estado:</label>
+          <select name="isActive" class="form-control" ng-model="test.isActive">
+           <option value="">Selecciona un estado de evaluaci&oacute;n</option>
+           <option value="false">Borrador</option> 
+           <option value="true">Publicado</option> 
+          </select>
+          <p ng-show="newTestForm.isActive.$invalid && !newTestForm.isActive.$pristine" class="help-block">El estado es requerido.</p>
          </div>
         </div>
 
@@ -79,11 +94,10 @@
             <tr>
              <th style="width: 4%;"></th>
              <th>Nombre</th>
-             <th>Ver opciones</th>
             </tr>
            </thead>
            <tbody ng-model="availableQuestions">
-            <tr ng-repeat="(i, availableQuestion) in availableQuestions">
+            <tr ng-repeat="(i, availableQuestion) in availableQuestions track by $index">
              <td>
               <div class="ui-checkbox ui-checkbox-default">
                <label class="ui-checkbox-inline">
@@ -93,10 +107,7 @@
               </div>
              </td>
              <td>
-              {{availableQuestion.name}}
-             </td>
-             <td>
-              <a href>Ver detalle</a>
+              {{availableQuestion.description}}
              </td>
             </tr>
            </tbody>
@@ -124,12 +135,12 @@
             </tr>
            </thead>
            <tbody ui-sortable ng-model="selectedQuestions">
-            <tr ng-repeat="selectedQuestion in selectedQuestions" style="cursor: move;">
+            <tr ng-repeat="selectedQuestion in selectedQuestions track by $index" style="cursor: move;">
              <td>
-              {{selectedQuestion.name}}
+              {{selectedQuestion.description}}
              </td>
              <td>
-              <a href>Ver detalle</a>
+              <a href ng-click="showQuestionDetail($index)">Ver detalle</a>
              </td>
             </tr>
            </tbody>
@@ -138,17 +149,85 @@
 
          <div class="form-group clearfix right">
           <button type="button" class="btn btn-default mr5" ng-click="stepNext(0)">Anterior</button>
-          <button type="button" class="btn btn-default" ng-click="stepNext(2)">Siguiente</button>
+          <button type="button" class="btn btn-default" ng-click="preview()">Previsualizar</button>
+          <button type="submit" class="btn btn-default" aria-hidden="true" ng-disabled="newTestForm.name.$invalid">Registrar</button>
          </div>
         </div>
        </div>
 
        <!-- Paso 3: Previsualizacion -->
-       <div class="form-horizontal col-lg-12" name="test-step-2" ng-show="steps[2]">
-        <div class="clearfix">
-         <button type="submit" class="btn btn-default right" ng-click="stepReset()">Registrar</button>
+       <modal title="Previsualizaci&oacute;n" size="modal-lg" visible="showPreview" data-backdrop="static">
+        <div class="form-group" ng-controller="PreviewTest">
+         <div class="col-lg-12" ng-repeat="question in currentPageStores">
+          <div class="panel-body">
+           <h2>
+            {{question.description}}
+           </h2>
+          </div>
+          <div class="panel panel-lined table-responsive mb30 " ng-controller="PreviewTest">
+           <table class="table">
+            <tbody >
+             <tr ng-repeat="(i, answer) in question.answers">
+              <td style="width: 5%;">
+               <div ng-if="question.isMultipleChoice">
+                <div class="ui-checkbox ui-checkbox-default">
+                 <label class="ui-checkbox-inline">
+                  <input type="checkbox" name="isCorrect">
+                  <span></span>
+                 </label>
+                </div>
+               </div>
+               <div ng-if="!question.isMultipleChoice">
+                <div class="ui-radio ui-radio-info">
+                 <label class="ui-radio-inline">
+                  <input type="radio" name="isCorrect">
+                  <span></span>
+                 </label>
+                </div>
+               </div>
+              </td>
+              <td>
+               {{question.answers[i].description}}
+              </td>
+             </tr>
+            </tbody>
+           </table>
+          </div>
+         </div>
+         <div class="panel-footer clearfix">
+          <pagination boundary-links="true" total-items="filteredData.length" ng-model="currentPage" class="pagination-sm right" 
+               max-size="5" ng-change="select(currentPage)" items-per-page="numPerPage" rotate="false"
+               previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+          </pagination>
+         </div>
         </div>
-       </div>
+       </modal>
+
+       <!-- Detalle de la pregunta -->
+       <modal title="Detalle de pregunta" visible="showDetail" data-backdrop="static">
+        <div class="form-group">
+         <div class="panel panel-lined table-responsive mb30">
+          <div class="panel-heading"><i>Respuestas disponibles</i></div>
+          <table class="table table-bordered table-striped">
+           <thead>
+            <tr>
+             <th></th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr ng-repeat="answer in selectedQuestion.answers">
+             <td>
+              {{answer.description}}
+             </td>
+            </tr>
+           </tbody>
+          </table>
+         </div>
+         <div class="form-group">
+          <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
+         </div>
+        </div>
+       </modal>
 
       </form>
 
