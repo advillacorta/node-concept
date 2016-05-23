@@ -31,6 +31,16 @@ router.get('/types/all', function(request, response)
 	});
 });
 
+router.get('/states/all', function(request, response)
+{
+	TestStates.find(function(error, testStates)
+	{
+		if(error) { response.send(error); }
+
+		response.status(200).json(testStates);
+	});
+});
+
 /*
 	Retrieves the test identified by the requested id.
 */
@@ -69,6 +79,7 @@ router.post('/', function(request, response)
 {
 	var test = new Test();
 	test.name = request.body.name;
+	test.type = request.body.type;
 	test.isActive = request.body.isActive;
 
 	for(var i in request.body.questions)
@@ -94,6 +105,7 @@ router.put('/:testId', function(request, response)
 		if(error) { response.send(error); }
 
 		test.name = request.body.name;
+		test.type = request.body.type;
 		test.isActive = request.body.isActive;
 		test.questions = [];
 

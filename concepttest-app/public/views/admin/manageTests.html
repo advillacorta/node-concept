@@ -40,7 +40,7 @@
        <tr ng-repeat="test in currentPageStores track by $index">
          <td>{{test.name}}</td>
          <td>Publicada</td>
-         <td><a href ng-click="edit(test._id)">Modificar</a></td>
+         <td><a href="#/admin/editTest?id={{test._id}}">Modificar</a></td>
          <td><a href ng-click="delete(test._id)">Eliminar</a></td>
        </tr>
       </tbody>
@@ -84,7 +84,7 @@
        <tr ng-repeat="test in currentPageStoresDraft track by $index">
          <td>{{test.name}}</td>
          <td>Borrador</td>
-         <td><a href ng-click="edit(test._id)">Modificar</a></td>
+         <td><a href="#/admin/editTest?id={{test._id}}">Modificar</a></td>
          <td><a href ng-click="delete(test._id)">Eliminar</a></td>
        </tr>
       </tbody>

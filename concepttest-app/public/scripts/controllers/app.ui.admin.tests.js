@@ -151,14 +151,17 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 			{
 				bootbox.confirm("¿Está seguro que desea eliminar la evaluaci&oacute;n seleccionada?", function(result)
 				{
-
+					if(result)
+					{
+						testService.deleteTest(id)
+						.then(function(response)
+						{
+							toastr.success('Registro eliminado.');
+							reload();
+						});
+					}
 				});
 			}
-
-		    $scope.edit = function(id)
-		    {
-
-		    };
 
 		    function reload()
 		    {
@@ -254,6 +257,16 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 		dataFactory.getTestTypes = function()
 		{
 			return $http.get(baseUrl + '/types/all');
+		}
+
+		dataFactory.getTestStates = function()
+		{
+			return $http.get(baseUrl + '/states/all');
+		}
+
+		dataFactory.getTest = function(testId)
+		{
+			return $http.get(baseUrl + '/' + testId);
 		}
 
 		dataFactory.getActiveTests = function()

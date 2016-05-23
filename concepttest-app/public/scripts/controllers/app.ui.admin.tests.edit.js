@@ -1,10 +1,10 @@
 ;(function() {
 "use strict";
 
-angular.module("app.ui.admin.tests.new", ['ui.sortable'])
+angular.module("app.ui.admin.tests.edit", ['ui.sortable'])
 
-	.controller("NewTest", ["$rootScope", "$scope", "$filter", "$window", "questionService", "testService",
-		function($rootScope, $scope, $filter, $window, questionService, testService)
+	.controller("EditTest", ["$rootScope", "$scope", "$filter", "$route", "$routeParams", "$window", "questionService", "testService",
+		function($rootScope, $scope, $filter, $route, $routeParams, $window, questionService, testService)
 		{	
 			$scope.steps = [true, false];
 			$scope.types;
@@ -15,12 +15,43 @@ angular.module("app.ui.admin.tests.new", ['ui.sortable'])
 				questions: [],
 			}
 
+			$scope.init = function()
+			{
+				testService.getTest($routeParams.id)
+				.then(function(response)
+				{
+					console.log(response.data);
+					$scope.test = response.data;
+
+					// Inicializando datos para pantalla
+					$scope.test.isActive = "" + $scope.test.isActive;
+					$scope.selectedQuestions = $scope.test.questions;
+
+					// Init
+					$scope.getTestTypes();
+					$scope.getAvailableQuestions();
+				});
+			}
+
 			$scope.getAvailableQuestions = function()
 			{
 				questionService.getQuestions()
 				.then(function(response)
 				{
 					$scope.availableQuestions = response.data;
+
+					for(var i in $scope.availableQuestions)
+					{
+						var availableQuestion = $scope.availableQuestions[i];
+						for(var j in $scope.selectedQuestions)
+						{
+							var selectedQuestion = $scope.selectedQuestions[j];
+							if(availableQuestion._id == selectedQuestion._id)
+							{
+								availableQuestion.selected = true;
+							}
+						}
+					}
 				});
 			}
 
@@ -98,23 +129,21 @@ angular.module("app.ui.admin.tests.new", ['ui.sortable'])
 
 			$scope.save = function(isValid)
 			{
+				console.log("isValid: '" + isValid + "'");
 				if(isValid)
 				{
+
 					$scope.test.questions = $scope.selectedQuestions;
 					console.log(angular.toJson($scope.test));
 					
-					testService.createTest($scope.test)
+					testService.updateTest($scope.test)
 					.then(function(response)
 					{
-						toastr.success('Registro satisfactorio');
+						toastr.success('Edici&oacute;n satisfactoria');
 						$window.location.href = '#/admin/manageTests';
 					});
 				}
 			}
-
-			// Init
-			$scope.getTestTypes();
-			$scope.getAvailableQuestions();
 		}
 	])
 }())

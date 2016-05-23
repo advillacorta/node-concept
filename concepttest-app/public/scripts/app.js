@@ -29,7 +29,8 @@
 		"app.ui.admin.questions",
 		"app.ui.admin.teams",
 		"app.ui.admin.tests",
-		"app.ui.admin.tests.new"
+		"app.ui.admin.tests.new",
+		"app.ui.admin.tests.edit"
 	])
 
 	.directive('modal', function () {
@@ -171,6 +172,7 @@
 	.config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
 
 		var routes = [
+			"admin/editTest",
 			"admin/newTest",
 			"admin/manageTeams",
 			"admin/manageProjects",
