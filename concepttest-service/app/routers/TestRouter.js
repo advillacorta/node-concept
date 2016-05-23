@@ -21,6 +21,9 @@ router.get('/', function(request, response)
 	});
 });
 
+/*
+	Retrieves all test types available
+*/
 router.get('/types/all', function(request, response)
 {
 	TestType.find(function(error, testTypes)
@@ -31,13 +34,38 @@ router.get('/types/all', function(request, response)
 	});
 });
 
-router.get('/states/all', function(request, response)
+/*
+	Retrieves all test in the specified state
+*/
+router.get('/state/:state', function(request, response)
 {
-	TestStates.find(function(error, testStates)
+	var state;
+	if(request.params.state == 'active') { state = true; } else { state = false; }
+	
+	Test.find(
+	{
+		isActive: state
+	}, function(error, tests)
 	{
 		if(error) { response.send(error); }
 
-		response.status(200).json(testStates);
+		response.status(200).json(tests);
+	});
+});
+
+/*
+	Retrieves all tests filtered by the specified type
+*/
+router.get('/type/:typeId', function(request, response)
+{
+	Test.find(
+	{
+		type: request.params.typeId
+	}, function(error, tests)
+	{
+		if(error) { response.send(error); }
+
+		response.status(200).json(tests);
 	});
 });
 
