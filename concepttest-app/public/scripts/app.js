@@ -28,7 +28,8 @@
 		"app.ui.admin.projects",
 		"app.ui.admin.questions",
 		"app.ui.admin.teams",
-		"app.ui.admin.tests"
+		"app.ui.admin.tests",
+		"app.ui.admin.tests.new"
 	])
 
 	.directive('modal', function () {
