@@ -21,6 +21,7 @@
 		"app.ctrls",
 		
 		/* App Modules */
+		/* Admin modules */
 		"app.ui.admin.skill",
 		"app.ui.admin.skill.types",
 		"app.ui.admin.skill.levels",
@@ -30,7 +31,10 @@
 		"app.ui.admin.teams",
 		"app.ui.admin.tests",
 		"app.ui.admin.tests.new",
-		"app.ui.admin.tests.edit"
+		"app.ui.admin.tests.edit",
+
+		/* User modules */
+		"app.ui.mytests"
 	])
 
 	.directive('modal', function () {
@@ -39,7 +43,7 @@
 	          '<div class="modal-dialog {{ size }}">' + 
 	            '<div class="modal-content">' + 
 	              '<div class="modal-header">' + 
-	                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
+	                '<button type="button" class="close" style="display: {{ closeable }}" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
 	                '<h4 class="modal-title">{{ title }}</h4>' + 
 	              '</div>' + 
 	              '<div class="modal-body" ng-transclude></div>' + 
@@ -53,6 +57,23 @@
 	      link: function postLink(scope, element, attrs) {
 	        scope.title = attrs.title;
 	        scope.size = attrs.size;
+	        scope.closeable = attrs.closeable;
+
+	        if(scope.closeable)
+	        {
+	        	if(scope.closeable == "false")
+	        	{
+	        		scope.closeable = "none";	
+	        	}
+	        	else
+	        	{
+	        		scope.closeable = "inline";
+	        	}
+	        }
+	        else
+	        {
+	        	scope.closeable = "inline";
+	        }
 
 	        scope.$watch(attrs.visible, function(value)
 	        {
@@ -179,7 +200,8 @@
 			"admin/manageTests",
 			"admin/manageQuestions",
 		    "admin/managePositions",
-			"admin/manageSkills"
+			"admin/manageSkills",
+			"user/myTests"
 		];
 
 		function setRoutes(route) {

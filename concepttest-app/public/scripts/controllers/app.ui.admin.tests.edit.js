@@ -127,6 +127,17 @@ angular.module("app.ui.admin.tests.edit", ['ui.sortable'])
 				$scope.selectedQuestion = $scope.selectedQuestions[index];
 			}
 
+			$scope.cancel = function()
+			{
+				bootbox.confirm("¿Está seguro que desea cancelar la edici&oacute;n de la evaluaci&oacute;n?", function(result)
+				{
+					if(result)
+					{
+						window.location.href = '#/admin/manageTests';
+					}
+				});
+			}
+
 			$scope.save = function(isValid)
 			{
 				console.log("isValid: '" + isValid + "'");

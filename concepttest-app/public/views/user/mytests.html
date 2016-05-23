@@ -1,0 +1,142 @@
+<div class="page page-table-static clearfix">
+
+ <ol class="breadcrumb breadcrumb-small">
+  <li>Administraci&oacute;n</li>
+  <li class="active">
+   <a href="#/admin/manageTests">Evaluaciones</a>
+  </li>
+  <li>Mis evaluaciones</li>
+ </ol>
+
+ <div class="page-wrap">
+  <div class="row">
+   <div class="col-lg-12" ng-controller="ListMyTests">
+    <!-- Evaluaciones publicadas -->
+   	<div class="panel panel-lined table-responsive mb30 ">
+     <div class="panel-heading"><i>Evaluaciones disponibles</i></div>
+     <div class="panel-body">
+      <form class="form-horizontal left col-lg-4">
+       <select name="skillType" 
+         class="form-control" 
+         ng-model="filter.type" 
+         ng-options="type._id as type.name for type in types" 
+         ng-change="selectType(filter.type)"
+         required>
+        <option value="">Selecciona un tipo de evaluaci&oacute;n</option>
+       </select>
+      </form>
+
+      <form class="form-horizontal right col-lg-4">
+       <input type="text" class="form-control input-sm" placeholder="Buscar..." data-ng-model="searchKeywords" data-ng-keyup="search()">
+      </form>
+     </div>
+
+     <table class="table table-bordered table-striped">
+      <thead>
+       <tr>
+         <th>Nombre
+          <div class="th">
+           <i class="fa fa-caret-up icon-up" ng-click=" order('name')" ng-class="{active: row == 'name'}"></i>
+           <i class="fa fa-caret-down icon-down" ng-click=" order('-name')" ng-class="{active: row == '-name'}"></i>
+          </div>
+         </th>
+         <th></th>
+         <th></th>
+       </tr>
+      </thead>
+      <tbody>
+       <tr ng-repeat="test in currentPageStores track by $index">
+         <td>{{test.name}}</td>
+         <td>Publicada</td>
+         <td><a href ng-click="toggleIntro(test._id)">Iniciar</a></td>
+       </tr>
+      </tbody>
+     </table>
+
+     <div class="panel-footer clearfix">
+      <p class="left mt15 small">
+      Mostrando {{currentPageStores.length*(currentPage - 1) + 1}} a {{currentPageStores.length*currentPage}} de {{datas.length}} registros
+      </p>
+      <pagination boundary-links="true" total-items="filteredData.length" ng-model="currentPage" class="pagination-sm right" 
+            max-size="5" ng-change="select(currentPage)" items-per-page="numPerPage" rotate="false"
+            previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+      </pagination>
+     </div>
+
+   	</div>
+
+    <!-- Introduccion previa a la evaluacion -->
+    <modal title="Introducci&oacute;n" size="modal-lg" visible="showIntro" data-backdrop="static">
+     <form role="form" name="editQuestionForm" novalidate>
+      <p>
+       Para rendir la siguiente evaluaci&oacute;n tomar en cuenta las siguientes consideraciones:
+       <ul>
+        <li><b>No</b> se permite el uso de material al momento de rendir la evaluaci&oacute;n.</li>
+        <li>El desarrollo es de forma personal.</li>
+        <li>De cancelarse la evaluaci&oacute;n sin finalizarla, se contabilizar&aacute; &uacute;nicamente las preguntas desarrolladas.</li>
+        <li>Cumplido el tiempo permitido para el desarrollo de la evaluaci&oacute;n, esta automaticamente finalizar&aacute;.</li>
+       </ul>
+      </p><br>
+      <div class="form-group">
+       <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button> 
+       <button type="button" class="btn btn-default" ng-click="continue()">Continuar</button>
+      </div>
+     </form>
+    </modal>
+
+    <!-- Evaluacion -->
+    <modal title="Evaluaci&oacute;n" size="modal-lg" closeable="false" visible="showTest" data-backdrop="static">
+     <div class="form-group" ng-controller="TakeTest">
+      <div class="col-lg-12" ng-repeat="question in currentPageStores">
+       <div class="panel-body">
+        <h2>
+         {{question.description}}
+        </h2>
+       </div>
+       <div class="panel panel-lined table-responsive mb30 " ng-controller="PreviewTest">
+        <table class="table">
+         <tbody >
+          <tr ng-repeat="(i, answer) in question.answers">
+           <td style="width: 5%;">
+            <div ng-if="question.isMultipleChoice">
+             <div class="ui-checkbox ui-checkbox-default">
+              <label class="ui-checkbox-inline">
+               <input type="checkbox" name="isCorrect">
+               <span></span>
+              </label>
+             </div>
+            </div>
+            <div ng-if="!question.isMultipleChoice">
+             <div class="ui-radio ui-radio-info">
+              <label class="ui-radio-inline">
+               <input type="radio" name="isCorrect">
+               <span></span>
+              </label>
+             </div>
+            </div>
+           </td>
+           <td>
+            {{question.answers[i].description}}
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div>
+      <div class="panel-footer clearfix">
+       <pagination boundary-links="true" total-items="filteredData.length" ng-model="currentPage" class="pagination-sm right" 
+            max-size="5" ng-change="select(currentPage)" items-per-page="numPerPage" rotate="false"
+            previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+       </pagination>
+      </div>
+     </div>
+     <div class="form-group" ng-controller="TakeTest">
+      <button type="button" class="btn btn-default" ng-click="cancel()">Cancelar</button> 
+      <button type="button" class="btn btn-default" ng-click="finish()">Finalizar</button>
+     </div>
+    </modal>
+
+   </div>
+  </div>
+ </div>
+</div>

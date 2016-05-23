@@ -18,8 +18,26 @@
        <button ng-click="toggleNew()" class="btn btn-default">Nueva</button>
       </form>
       
+      <form class="form-horizontal left col-lg-4">
+       <select name="skillType" 
+         class="form-control" 
+         ng-model="filter.skillType" 
+         ng-options="skillType._id as skillType.name for skillType in skillTypes" 
+         ng-change="selectSkillType(filter.skillType)"
+         required>
+        <option value="">Selecciona un tipo de competencia</option>
+       </select>
+      </form>
+
       <form class="form-horizontal right col-lg-4">
-       <input type="text" class="form-control input-sm" placeholder="Buscar..." data-ng-model="searchKeywords" data-ng-keyup="search()">
+       <select name="skill" 
+         class="form-control" 
+         ng-model="filter.skill" 
+         ng-options="skill._id as skill.name for skill in skills" 
+         ng-change="selectSkill(filter.skill)"
+         required>
+        <option value="">Selecciona una competencia</option>
+       </select>
       </form>
      </div>
      

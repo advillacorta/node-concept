@@ -3,8 +3,8 @@
 
 angular.module("app.ui.admin.questions", [])
 
-	.controller("ListQuestions", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "questionService",
-		function($route, $rootScope, $scope, $filter, $window, $timeout, questionService)
+	.controller("ListQuestions", ["$route", "$rootScope", "$scope", "$filter", "$window", "$timeout", "skillTypeService", "skillService", "questionService",
+		function($route, $rootScope, $scope, $filter, $window, $timeout, skillTypeService, skillService, questionService)
 		{
 			$scope.datas;
 			$scope.searchKeywords;
@@ -14,6 +14,10 @@ angular.module("app.ui.admin.questions", [])
 			$scope.currentPage;
 			$scope.currentPageStores;
 
+			$scope.skillTypes;
+			$scope.skills;
+
+			getSkillTypes();
 			getQuestions();
 
 			function getQuestions()
@@ -77,6 +81,15 @@ angular.module("app.ui.admin.questions", [])
 				});
 			}
 
+			function getSkillTypes()
+			{
+				skillTypeService.getSkillTypes()
+				.then(function(response)
+				{
+					$scope.skillTypes = response.data;
+				});
+			}
+
 			$scope.delete = function(id)
 			{
 				bootbox.confirm("¿Está seguro que desea eliminar la pregunta seleccionada?", function(result)
@@ -105,6 +118,36 @@ angular.module("app.ui.admin.questions", [])
 		        $scope.showEdit = !$scope.showEdit;
 		        $rootScope.$emit('handleEditQuestion', { id: id} );
 		    };
+
+		    $scope.selectSkillType = function(id)
+		    {
+		    	skillService.getSkillsByType(id)
+		    	.then(function(response)
+		    	{
+		    		$scope.skills = response.data;
+
+		    		questionService.getQuestionsBySkillType(id)
+		    		.then(function(response)
+		    		{
+		    			$scope.datas = response.data;
+
+						$scope.search();
+						$scope.select($scope.currentPage);
+		    		});
+		    	});
+		    }
+
+		    $scope.selectSkill = function(id)
+		    {
+		    	questionService.getQuestionsBySkill(id)
+		    	.then(function(response)
+		    	{
+		    		$scope.datas = response.data;
+
+					$scope.search();
+					$scope.select($scope.currentPage);
+		    	});
+		    }
 
 		    function reload()
 		    {

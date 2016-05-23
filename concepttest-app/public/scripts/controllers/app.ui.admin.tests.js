@@ -259,6 +259,11 @@ angular.module("app.ui.admin.tests", ['ui.sortable'])
 			return $http.get(baseUrl + '/types/all');
 		}
 
+		dataFactory.getTestsByType = function(typeId)
+		{
+			return $http.get(baseUrl + '/type/' + typeId);
+		}
+
 		dataFactory.getTestStates = function()
 		{
 			return $http.get(baseUrl + '/states/all');
